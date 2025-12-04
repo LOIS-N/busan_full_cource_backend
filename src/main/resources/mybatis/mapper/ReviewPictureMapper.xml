@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.ReviewPictureMapper">
+
+    <!-- Result Map -->
+    <resultMap id="ReviewPictureResultMap" type="com.ssafy.gt.domain.ReviewPicture">
+        <id property="id" column="id"/>
+        <result property="reviewId" column="review_id"/>
+        <result property="picturePath" column="picture_path"/>
+    </resultMap>
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.ssafy.gt.domain.ReviewPicture" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO review_pictures (review_id, picture_path)
+        VALUES (#{reviewId}, #{picturePath})
+    </insert>
+
+    <!-- Select by ID -->
+    <select id="selectById" parameterType="int" resultMap="ReviewPictureResultMap">
+        SELECT * FROM review_pictures WHERE id = #{id}
+    </select>
+
+    <!-- Select by Review ID -->
+    <select id="selectByReviewId" parameterType="int" resultMap="ReviewPictureResultMap">
+        SELECT * FROM review_pictures WHERE review_id = #{reviewId}
+    </select>
+
+    <!-- Select All -->
+    <select id="selectAll" resultMap="ReviewPictureResultMap">
+        SELECT * FROM review_pictures
+    </select>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.ssafy.gt.domain.ReviewPicture">
+        UPDATE review_pictures
+        SET picture_path = #{picturePath}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM review_pictures WHERE id = #{id}
+    </delete>
+
+    <!-- Delete by Review ID -->
+    <delete id="deleteByReviewId" parameterType="int">
+        DELETE FROM review_pictures WHERE review_id = #{reviewId}
+    </delete>
+
+</mapper>

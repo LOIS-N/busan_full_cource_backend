@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.PlaceMapper">
+
+    <!-- Result Map -->
+    <resultMap id="PlaceResultMap" type="com.ssafy.gt.domain.Place">
+        <id property="id" column="id"/>
+        <result property="tag" column="tag"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="thumbnailUrl" column="thumbnail_url"/>
+        <result property="averageRating" column="average_rating"/>
+    </resultMap>
+
+    <!-- Select by ID -->
+    <select id="selectById" parameterType="int" resultMap="PlaceResultMap">
+        SELECT * FROM places WHERE id = #{id}
+    </select>
+
+    <!-- Select by Tag -->
+    <select id="selectByTag" parameterType="int" resultMap="PlaceResultMap">
+        SELECT * FROM places WHERE tag = #{tag}
+    </select>
+
+    <!-- Select All -->
+    <select id="selectAll" resultMap="PlaceResultMap">
+        SELECT * FROM places
+    </select>
+
+    <!-- Update Average Rating -->
+    <update id="updateAverageRating">
+        UPDATE places
+        SET average_rating = #{averageRating}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

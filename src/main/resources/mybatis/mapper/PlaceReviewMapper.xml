@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.PlaceReviewMapper">
+
+    <!-- Result Map -->
+    <resultMap id="PlaceReviewResultMap" type="com.ssafy.gt.domain.PlaceReview">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rating" column="rating"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="targetType" column="target_type"/>
+        <result property="targetId" column="target_id"/>
+    </resultMap>
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.ssafy.gt.domain.PlaceReview" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO place_reviews (user_id, rating, content, target_type, target_id)
+        VALUES (#{userId}, #{rating}, #{content}, #{targetType}, #{targetId})
+    </insert>
+
+    <!-- Select by ID -->
+    <select id="selectById" parameterType="int" resultMap="PlaceReviewResultMap">
+        SELECT * FROM place_reviews WHERE id = #{id}
+    </select>
+
+    <!-- Select by User ID -->
+    <select id="selectByUserId" parameterType="int" resultMap="PlaceReviewResultMap">
+        SELECT * FROM place_reviews WHERE user_id = #{userId}
+    </select>
+
+    <!-- Select by Target -->
+    <select id="selectByTarget" resultMap="PlaceReviewResultMap">
+        SELECT * FROM place_reviews
+        WHERE target_type = #{targetType} AND target_id = #{targetId}
+    </select>
+
+    <!-- Select All -->
+    <select id="selectAll" resultMap="PlaceReviewResultMap">
+        SELECT * FROM place_reviews
+    </select>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.ssafy.gt.domain.PlaceReview">
+        UPDATE place_reviews
+        SET rating = #{rating},
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM place_reviews WHERE id = #{id}
+    </delete>
+
+    <!-- Get Average Rating by Target -->
+    <select id="getAverageRatingByTarget" resultType="java.math.BigDecimal">
+        SELECT AVG(rating)
+        FROM place_reviews
+        WHERE target_type = #{targetType} AND target_id = #{targetId}
+    </select>
+
+</mapper>

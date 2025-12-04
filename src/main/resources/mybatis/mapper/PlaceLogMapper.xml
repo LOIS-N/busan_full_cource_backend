@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.PlaceLogMapper">
+
+    <!-- Result Map -->
+    <resultMap id="PlaceLogResultMap" type="com.ssafy.gt.domain.PlaceLog">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="log" column="log"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.ssafy.gt.domain.PlaceLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO place_log (user_id, log)
+        VALUES (#{userId}, #{log})
+    </insert>
+
+    <!-- Select by ID -->
+    <select id="selectById" parameterType="int" resultMap="PlaceLogResultMap">
+        SELECT * FROM place_log WHERE id = #{id}
+    </select>
+
+    <!-- Select by User ID -->
+    <select id="selectByUserId" parameterType="int" resultMap="PlaceLogResultMap">
+        SELECT * FROM place_log WHERE user_id = #{userId}
+    </select>
+
+    <!-- Select All -->
+    <select id="selectAll" resultMap="PlaceLogResultMap">
+        SELECT * FROM place_log
+    </select>
+
+</mapper>
