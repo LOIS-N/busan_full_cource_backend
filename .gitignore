@@ -5,18 +5,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -25,14 +13,19 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-application.properties
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
 
 ### VS Code ###
 .vscode/
+
+# Spring Boot 민감 정보
+application.properties
+application-*.properties
+application.yml
+application-*.yml
+
+# 로그
+.log
+
+# 기타
+*.class
+.DS_Store
