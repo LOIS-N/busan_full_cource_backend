@@ -1,0 +1,109 @@
+package com.ssafy.gt.controller;
+
+import com.ssafy.gt.domain.Place;
+import com.ssafy.gt.service.PlaceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/place")
+@RequiredArgsConstructor
+public class PlaceController {
+
+    private final PlaceService placeService;
+
+    /**
+     * 거리 기반 장소 검색
+     * GET /api/v1/place/getPlaces?x={x}&y={y}&dist={dist}
+     */
+    @GetMapping("/getPlaces")
+    public ResponseEntity<List<Place>> getPlaces(
+            @RequestParam Double x,
+            @RequestParam Double y,
+            @RequestParam Double dist) {
+        List<Place> places = placeService.getPlacesByLocation(x, y, dist);
+        return ResponseEntity.ok(places);
+    }
+
+    /**
+     * ID로 장소 조회
+     * GET /api/v1/place/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Place> getPlaceById(@PathVariable int id) {
+        Place place = placeService.getPlaceById(id);
+        if (place == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(place);
+    }
+
+    /**
+     * 태그로 장소 조회
+     * GET /api/v1/place/tag/{tag}
+     */
+    @GetMapping("/tag/{tag}")
+    public ResponseEntity<List<Place>> getPlacesByTag(@PathVariable int tag) {
+        List<Place> places = placeService.getPlacesByTag(tag);
+        return ResponseEntity.ok(places);
+    }
+
+    /**
+     * 모든 장소 조회
+     * GET /api/v1/place
+     */
+    @GetMapping
+    public ResponseEntity<List<Place>> getAllPlaces() {
+        List<Place> places = placeService.getAllPlaces();
+        return ResponseEntity.ok(places);
+    }
+
+    /**
+     * 장소 등록
+     * POST /api/v1/place
+     */
+    @PostMapping
+    public ResponseEntity<Place> createPlace(@RequestBody Place place) {
+        placeService.createPlace(place);
+        return ResponseEntity.ok(place);
+    }
+
+    /**
+     * 장소 수정
+     * PUT /api/v1/place/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updatePlace(
+            @PathVariable int id,
+            @RequestBody Place place) {
+        place.setId(id);
+        placeService.updatePlace(place);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 평균 평점 업데이트
+     * PATCH /api/v1/place/{id}/rating
+     */
+    @PatchMapping("/{id}/rating")
+    public ResponseEntity<Void> updateAverageRating(
+            @PathVariable int id,
+            @RequestParam BigDecimal averageRating) {
+        placeService.updateAverageRating(id, averageRating);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 장소 삭제
+     * DELETE /api/v1/place/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlace(@PathVariable int id) {
+        placeService.deletePlace(id);
+        return ResponseEntity.ok().build();
+    }
+}

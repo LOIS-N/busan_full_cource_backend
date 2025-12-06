@@ -23,4 +23,7 @@ public class Restaurant {
     private String imageUrl;
     private String thumbnailUrl;
     private BigDecimal averageRating;
+
+    // join으로 가져올 데이터
+    private String tagType;
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,8 @@ public class PlaceReview {
     private LocalDateTime createdAt;
     private String targetType;
     private Integer targetId;
+
+    // join으로 가져올 데이터
+    private String nickname;
+    private List<ReviewPicture> pictures;
 }

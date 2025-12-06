@@ -17,23 +17,52 @@
         <result property="imageUrl" column="image_url"/>
         <result property="thumbnailUrl" column="thumbnail_url"/>
         <result property="averageRating" column="average_rating"/>
+        <result property="tagType" column="tag_type"/>
     </resultMap>
-    
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.ssafy.gt.domain.Restaurant" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO restaurants (tag, x, y, name, address, tel, opening_hours, image_url, thumbnail_url, average_rating)
+        VALUES (#{tag}, #{x}, #{y}, #{name}, #{address}, #{tel}, #{openingHours}, #{imageUrl}, #{thumbnailUrl}, #{averageRating})
+    </insert>
+
     <!-- Select by ID -->
     <select id="selectById" parameterType="int" resultMap="RestaurantResultMap">
-        SELECT * FROM restaurants WHERE id = #{id}
+        SELECT r.*, rt.type as tag_type
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        WHERE r.id = #{id}
     </select>
 
     <!-- Select by Tag -->
     <select id="selectByTag" parameterType="int" resultMap="RestaurantResultMap">
-        SELECT * FROM restaurants WHERE tag = #{tag}
+        SELECT r.*, rt.type as tag_type
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        WHERE r.tag = #{tag}
+    </select>
+
+    <!-- Select by Location (거리 기반 검색) -->
+    <select id="selectByLocation" resultMap="RestaurantResultMap">
+        SELECT r.*, rt.type as tag_type,
+               (6371 * acos(
+                   cos(radians(#{y})) * cos(radians(r.y)) *
+                   cos(radians(r.x) - radians(#{x})) +
+                   sin(radians(#{y})) * sin(radians(r.y))
+               )) AS distance
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        HAVING distance &lt;= #{dist}
+        ORDER BY distance
     </select>
 
     <!-- Select All -->
     <select id="selectAll" resultMap="RestaurantResultMap">
-        SELECT * FROM restaurants
+        SELECT r.*, rt.type as tag_type
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
     </select>
-
+    
     <!-- Update Average Rating -->
     <update id="updateAverageRating">
         UPDATE restaurants
