@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlaceReview {
+public class Review {
     private Integer id;
     private Integer userId;
     private BigDecimal rating;

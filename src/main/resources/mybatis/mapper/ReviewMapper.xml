@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.PlaceReviewMapper">
 
     <!-- Result Map -->
-    <resultMap id="PlaceReviewResultMap" type="com.ssafy.gt.dto.PlaceReview">
+    <resultMap id="ReviewResultMap" type="com.ssafy.gt.dto.Review">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="rating" column="rating"/>
@@ -14,34 +14,23 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.dto.PlaceReview" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.Review" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO place_reviews (user_id, rating, content, target_type, target_id)
         VALUES (#{userId}, #{rating}, #{content}, #{targetType}, #{targetId})
     </insert>
 
-    <!-- Select by ID -->
-    <select id="selectById" parameterType="int" resultMap="PlaceReviewResultMap">
-        SELECT * FROM place_reviews WHERE id = #{id}
+    <!-- Select by TargetId And TargetType -->
+    <select id="selectById" parameterType="int" resultMap="ReviewResultMap">
+        SELECT * FROM place_reviews WHERE target_id = #{TargetId} AND target_type = #{TargetType}
     </select>
 
     <!-- Select by User ID -->
-    <select id="selectByUserId" parameterType="int" resultMap="PlaceReviewResultMap">
+    <select id="selectByUserId" parameterType="int" resultMap="ReviewResultMap">
         SELECT * FROM place_reviews WHERE user_id = #{userId}
     </select>
 
-    <!-- Select by Target -->
-    <select id="selectByTarget" resultMap="PlaceReviewResultMap">
-        SELECT * FROM place_reviews
-        WHERE target_type = #{targetType} AND target_id = #{targetId}
-    </select>
-
-    <!-- Select All -->
-    <select id="selectAll" resultMap="PlaceReviewResultMap">
-        SELECT * FROM place_reviews
-    </select>
-
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.dto.PlaceReview">
+    <update id="update" parameterType="com.ssafy.gt.dto.Review">
         UPDATE place_reviews
         SET rating = #{rating},
             content = #{content}
