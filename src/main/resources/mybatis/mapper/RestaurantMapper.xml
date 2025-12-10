@@ -52,8 +52,25 @@
                )) AS distance
         FROM restaurants r
         LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        <where>
+            <if test="tag != null">
+                AND r.tag = #{tag}
+            </if>
+        </where>
         HAVING distance &lt;= #{dist}
         ORDER BY distance
+    </select>
+
+    <!-- Full-Text 검색으로 후보군 추출 -->
+    <select id="findCandidates" resultMap="RestaurantResultMap">
+        SELECT r.*, rt.type as tag_type
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        WHERE MATCH(r.name, r.address) AGAINST(#{keyword} IN BOOLEAN MODE)
+        <if test="tag != null">
+            AND r.tag = #{tag}
+        </if>
+        LIMIT 1000
     </select>
 
     <!-- Select All -->
@@ -62,12 +79,45 @@
         FROM restaurants r
         LEFT JOIN restaurant_tags rt ON r.tag = rt.id
     </select>
-    
+
+    <!-- Select All by Tag -->
+    <select id="selectAllByTag" resultMap="RestaurantResultMap">
+        SELECT r.*, rt.type as tag_type
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        <where>
+            <if test="tag != null">
+                r.tag = #{tag}
+            </if>
+        </where>
+    </select>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.ssafy.gt.domain.Restaurant">
+        UPDATE restaurants
+        SET tag = #{tag},
+            x = #{x},
+            y = #{y},
+            name = #{name},
+            address = #{address},
+            tel = #{tel},
+            opening_hours = #{openingHours},
+            image_url = #{imageUrl},
+            thumbnail_url = #{thumbnailUrl},
+            average_rating = #{averageRating}
+        WHERE id = #{id}
+    </update>
+
     <!-- Update Average Rating -->
     <update id="updateAverageRating">
         UPDATE restaurants
         SET average_rating = #{averageRating}
         WHERE id = #{id}
     </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM restaurants WHERE id = #{id}
+    </delete>
 
 </mapper>

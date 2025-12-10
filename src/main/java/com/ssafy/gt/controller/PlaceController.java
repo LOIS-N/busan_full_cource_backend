@@ -18,14 +18,15 @@ public class PlaceController {
 
     /**
      * 거리 기반 장소 검색
-     * GET /api/v1/place/getPlaces?x={x}&y={y}&dist={dist}
+     * GET /api/v1/place/getPlaces?x={x}&y={y}&dist={dist}&tag={tag}
      */
     @GetMapping("/getPlaces")
     public ResponseEntity<List<Place>> getPlaces(
             @RequestParam Double x,
             @RequestParam Double y,
-            @RequestParam Double dist) {
-        List<Place> places = placeService.getPlacesByLocation(x, y, dist);
+            @RequestParam Double dist,
+            @RequestParam(required = false) Integer tag) {
+        List<Place> places = placeService.getPlacesByLocation(x, y, dist, tag);
         return ResponseEntity.ok(places);
     }
 
@@ -50,6 +51,18 @@ public class PlaceController {
     public ResponseEntity<List<Place>> getPlacesByTag(@PathVariable int tag) {
         List<Place> places = placeService.getPlacesByTag(tag);
         return ResponseEntity.ok(places);
+    }
+
+    /**
+     * 검색어로 장소 조회
+     * GET /api/v1/place/search/{search}?tag={tag}
+     */
+    @GetMapping("/search/{search}")
+    public ResponseEntity<List<Place>> search(
+            @PathVariable String search,
+            @RequestParam(required = false) Integer tag) {
+        List<Place> results = placeService.search(search, tag);
+        return ResponseEntity.ok(results);
     }
 
     /**
