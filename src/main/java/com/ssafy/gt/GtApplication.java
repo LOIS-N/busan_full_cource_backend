@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GtApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GtApplication.class, args);
+        SpringApplication.run(GtApplication.class, args); //test
     }
 
 }
