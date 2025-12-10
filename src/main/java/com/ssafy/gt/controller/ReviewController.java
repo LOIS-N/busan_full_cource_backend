@@ -17,9 +17,9 @@ public class ReviewController {
      * 리뷰 등록
      * POST /api/v1/review/postReview
      */
-    @PostMapping("/postReview")
+    @PostMapping
     public ResponseEntity<Review> addReview(@RequestBody Review review){
-        reviewService.CreateReview(review);
+        reviewService.createReview(review);
         return ResponseEntity.ok(review);
     }
     /**
@@ -27,8 +27,9 @@ public class ReviewController {
      * GET /api/v1/review/getReviewByTarget?targetId={targetId}&targetType={targetType}
      */
     @GetMapping("/getReviewByTarget")
-    public ResponseEntity<List<Review>> getReviewsByTarget(@RequestParam int targetId,
-                                                           @RequestParam int targetType
+    public ResponseEntity<List<Review>> getReviewsByTarget(
+            @RequestParam int targetId,
+            @RequestParam int targetType
     ) {
         List<Review> reviews = reviewService.getReviewsByTarget(targetId,targetType);
         return ResponseEntity.ok(reviews);
@@ -36,7 +37,7 @@ public class ReviewController {
 
     /**
      * 본인 작성 리뷰 불러오기
-     * GET /api/v1/review/getReviewByUserId?userId ={userId}
+     * GET /api/v1/review/getReviewByUserId?userId={userId}
      */
     @GetMapping("/getReviewByUserId")
     public ResponseEntity<List<Review>> getReviewsByUserId(@RequestParam int userId){
@@ -46,17 +47,24 @@ public class ReviewController {
 
     /**
      * 리뷰 수정하기
-     * GET /api/v1/review/updateReview?ReviewId = {reviewId}
+     * PUT /api/v1/review/{id}
      */
-    @PostMapping
-    public  ResponseEntity<Review> updateReview(@RequestBody Review review){
+    @PutMapping("/{id}")
+    public  ResponseEntity<Void> updateReview(
+            @PathVariable int id,
+            @RequestBody Review review
+    ){
+        review.setId(id);
         reviewService.update(review);
-        return ResponseEntity.ok(review);
+        return ResponseEntity.ok().build();
     }
-
-    @DeleteMapping
-    public ResponseEntity<Void> deleteReview(@RequestParam int reviewId){
-        reviewService.delete(reviewId);
+    /**
+     * 리뷰 삭제
+     * DELETE /api/v1/review/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable int id){
+        reviewService.delete(id);
         return ResponseEntity.ok().build();
     }
 

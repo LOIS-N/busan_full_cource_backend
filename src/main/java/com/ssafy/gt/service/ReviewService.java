@@ -18,7 +18,7 @@ public class ReviewService {
     /**
     * 리뷰 생성
     */
-    public int CreateReview(Review review){ return reviewMapper.insert(review);}
+    public int createReview(Review review){ return reviewMapper.insert(review);}
     /**
      *타겟으로부터 리뷰 조회
      */
