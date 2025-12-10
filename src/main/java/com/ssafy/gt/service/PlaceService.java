@@ -1,6 +1,6 @@
 package com.ssafy.gt.service;
 
-import com.ssafy.gt.domain.Place;
+import com.ssafy.gt.dto.Place;
 import com.ssafy.gt.mapper.PlaceMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.similarity.LevenshteinDistance;

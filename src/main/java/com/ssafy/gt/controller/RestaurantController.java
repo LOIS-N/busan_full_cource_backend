@@ -1,6 +1,6 @@
 package com.ssafy.gt.controller;
 
-import com.ssafy.gt.domain.Restaurant;
+import com.ssafy.gt.dto.Restaurant;
 import com.ssafy.gt.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

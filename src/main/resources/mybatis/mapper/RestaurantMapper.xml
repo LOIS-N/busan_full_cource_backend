@@ -5,7 +5,7 @@
 
 
     <!-- Result Map -->
-    <resultMap id="RestaurantResultMap" type="com.ssafy.gt.domain.Restaurant">
+    <resultMap id="RestaurantResultMap" type="com.ssafy.gt.dto.Restaurant">
         <id property="id" column="id"/>
         <result property="tag" column="tag"/>
         <result property="x" column="x"/>
@@ -21,7 +21,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.Restaurant" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.Restaurant" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO restaurants (tag, x, y, name, address, tel, opening_hours, image_url, thumbnail_url, average_rating)
         VALUES (#{tag}, #{x}, #{y}, #{name}, #{address}, #{tel}, #{openingHours}, #{imageUrl}, #{thumbnailUrl}, #{averageRating})
     </insert>
@@ -93,7 +93,7 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.domain.Restaurant">
+    <update id="update" parameterType="com.ssafy.gt.dto.Restaurant">
         UPDATE restaurants
         SET tag = #{tag},
             x = #{x},

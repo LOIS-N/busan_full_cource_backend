@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.UserMapper">
 
     <!-- Result Map -->
-    <resultMap id="UserResultMap" type="com.ssafy.gt.domain.User">
+    <resultMap id="UserResultMap" type="com.ssafy.gt.dto.User">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="password" column="password"/>
@@ -12,7 +12,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (user_id, password, email, nickname)
         VALUES (#{userId}, #{password}, #{email}, #{nickname})
     </insert>
@@ -38,7 +38,7 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.domain.User">
+    <update id="update" parameterType="com.ssafy.gt.dto.User">
         UPDATE users
         SET password = #{password},
             email = #{email},

@@ -1,6 +1,6 @@
 package com.ssafy.gt.service;
 
-import com.ssafy.gt.domain.Restaurant;
+import com.ssafy.gt.dto.Restaurant;
 import com.ssafy.gt.mapper.RestaurantMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.similarity.LevenshteinDistance;

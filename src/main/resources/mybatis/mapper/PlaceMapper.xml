@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.PlaceMapper">
 
     <!-- Result Map -->
-    <resultMap id="PlaceResultMap" type="com.ssafy.gt.domain.Place">
+    <resultMap id="PlaceResultMap" type="com.ssafy.gt.dto.Place">
         <id property="id" column="id"/>
         <result property="tag" column="tag"/>
         <result property="x" column="x"/>
@@ -17,7 +17,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.Place" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.Place" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO places (tag, x, y, name, address, image_url, thumbnail_url, average_rating)
         VALUES (#{tag}, #{x}, #{y}, #{name}, #{address}, #{imageUrl}, #{thumbnailUrl}, #{averageRating})
     </insert>

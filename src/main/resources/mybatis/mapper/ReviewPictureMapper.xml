@@ -3,14 +3,14 @@
 <mapper namespace="com.ssafy.gt.mapper.ReviewPictureMapper">
 
     <!-- Result Map -->
-    <resultMap id="ReviewPictureResultMap" type="com.ssafy.gt.domain.ReviewPicture">
+    <resultMap id="ReviewPictureResultMap" type="com.ssafy.gt.dto.ReviewPicture">
         <id property="id" column="id"/>
         <result property="reviewId" column="review_id"/>
         <result property="picturePath" column="picture_path"/>
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.ReviewPicture" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.ReviewPicture" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO review_pictures (review_id, picture_path)
         VALUES (#{reviewId}, #{picturePath})
     </insert>
@@ -31,7 +31,7 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.domain.ReviewPicture">
+    <update id="update" parameterType="com.ssafy.gt.dto.ReviewPicture">
         UPDATE review_pictures
         SET picture_path = #{picturePath}
         WHERE id = #{id}

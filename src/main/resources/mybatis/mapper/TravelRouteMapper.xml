@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.TravelRouteMapper">
 
     <!-- Result Map -->
-    <resultMap id="TravelRouteResultMap" type="com.ssafy.gt.domain.TravelRoute">
+    <resultMap id="TravelRouteResultMap" type="com.ssafy.gt.dto.TravelRoute">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="route" column="route"/>
@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.TravelRoute" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.TravelRoute" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO travel_routes (user_id, route)
         VALUES (#{userId}, #{route})
     </insert>
@@ -32,7 +32,7 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.domain.TravelRoute">
+    <update id="update" parameterType="com.ssafy.gt.dto.TravelRoute">
         UPDATE travel_routes
         SET route = #{route}
         WHERE id = #{id}

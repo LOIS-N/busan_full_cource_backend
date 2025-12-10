@@ -1,6 +1,6 @@
 package com.ssafy.gt.controller;
 
-import com.ssafy.gt.domain.Place;
+import com.ssafy.gt.dto.Place;
 import com.ssafy.gt.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.RestaurantLogMapper">
 
     <!-- Result Map -->
-    <resultMap id="RestaurantLogResultMap" type="com.ssafy.gt.domain.RestaurantLog">
+    <resultMap id="RestaurantLogResultMap" type="com.ssafy.gt.dto.RestaurantLog">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="log" column="log"/>
@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.RestaurantLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.RestaurantLog" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO restaurant_log (user_id, log)
         VALUES (#{userId}, #{log})
     </insert>

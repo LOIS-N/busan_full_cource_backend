@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.PlaceLogMapper">
 
     <!-- Result Map -->
-    <resultMap id="PlaceLogResultMap" type="com.ssafy.gt.domain.PlaceLog">
+    <resultMap id="PlaceLogResultMap" type="com.ssafy.gt.dto.PlaceLog">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="log" column="log"/>
@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.PlaceLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.PlaceLog" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO place_log (user_id, log)
         VALUES (#{userId}, #{log})
     </insert>

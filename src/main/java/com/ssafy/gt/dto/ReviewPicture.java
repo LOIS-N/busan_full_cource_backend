@@ -1,4 +1,4 @@
-package com.ssafy.gt.domain;
+package com.ssafy.gt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class ReviewPicture {
     private Integer id;
-    private String userId;
-    private String password;
-    private String email;
-    private String nickname;
+    private Integer reviewId;
+    private String picturePath;
 }

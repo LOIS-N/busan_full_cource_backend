@@ -1,6 +1,6 @@
 package com.ssafy.gt.mapper;
 
-import com.ssafy.gt.domain.Place;
+import com.ssafy.gt.dto.Place;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

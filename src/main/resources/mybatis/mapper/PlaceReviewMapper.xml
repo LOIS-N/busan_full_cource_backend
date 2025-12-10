@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.gt.mapper.PlaceReviewMapper">
 
     <!-- Result Map -->
-    <resultMap id="PlaceReviewResultMap" type="com.ssafy.gt.domain.PlaceReview">
+    <resultMap id="PlaceReviewResultMap" type="com.ssafy.gt.dto.PlaceReview">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="rating" column="rating"/>
@@ -14,7 +14,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.domain.PlaceReview" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.ssafy.gt.dto.PlaceReview" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO place_reviews (user_id, rating, content, target_type, target_id)
         VALUES (#{userId}, #{rating}, #{content}, #{targetType}, #{targetId})
     </insert>
@@ -41,7 +41,7 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.domain.PlaceReview">
+    <update id="update" parameterType="com.ssafy.gt.dto.PlaceReview">
         UPDATE place_reviews
         SET rating = #{rating},
             content = #{content}

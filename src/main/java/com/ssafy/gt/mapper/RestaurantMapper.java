@@ -1,6 +1,6 @@
 package com.ssafy.gt.mapper;
 
-import com.ssafy.gt.domain.Restaurant;
+import com.ssafy.gt.dto.Restaurant;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

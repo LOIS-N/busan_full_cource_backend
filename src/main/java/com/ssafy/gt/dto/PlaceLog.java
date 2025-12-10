@@ -1,4 +1,4 @@
-package com.ssafy.gt.domain;
+package com.ssafy.gt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
