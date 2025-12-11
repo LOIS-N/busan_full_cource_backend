@@ -15,11 +15,12 @@ public class ReviewController {
     private final ReviewService reviewService;
     /**
      * 리뷰 등록
-     * POST /api/v1/review/postReview
+     * POST /api/v1/review/
      */
     @PostMapping
     public ResponseEntity<Review> addReview(@RequestBody Review review){
-        reviewService.createReview(review);
+        //reviewService.createReview(review);
+        System.out.println(review);
         return ResponseEntity.ok(review);
     }
     /**
