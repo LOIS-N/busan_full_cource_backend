@@ -14,7 +14,7 @@ public class AuthService {
         /**
          * 회원가입
          */
-        public User regist(User user) {
+        public Integer regist(User user) {
                 return authMapper.regist(user);
         }
 
@@ -26,23 +26,34 @@ public class AuthService {
         }
 
         /**
-         * 아이디 조회
+         * 회원정보 조회
          */
         public User selectByUserId(User user) {
                 return authMapper.selectByUserId(user);
         }
 
         /**
-         * 이메일 조회
+         * 아이디 중복 검사
          */
-        public User selectByEmail(User user) {
-                return authMapper.selectByEmail(user);
+        public Integer checkUserId(User user) {
+                User Checkuser = authMapper.checkUserId(user);
+                if(Checkuser != null) { return 1; }
+                return 0;
+        }
+
+        /**
+         * 이메일 중복 검사
+         */
+        public Integer checkEmail(User user) {
+                User Checkuser = authMapper.checkEmail(user);
+                if(Checkuser != null) { return 1; }
+                return 0;
         }
 
         /**
          * 회원정보 수정
          */
-        public User userUpdate(User user) {
+        public Integer userUpdate(User user) {
                 return authMapper.update(user);
         }
 }

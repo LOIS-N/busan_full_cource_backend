@@ -6,13 +6,15 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AuthMapper {
 
-    User regist(User user);
+    Integer regist(User user);
 
     User login(User user);
 
-    User selectByEmail(User user);
+    User checkUserId(User user);
+
+    User checkEmail(User user);
 
     User selectByUserId(User user);
 
-    User update(User user);
+    int update(User user);
 }

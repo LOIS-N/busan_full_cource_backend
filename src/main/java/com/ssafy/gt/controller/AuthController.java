@@ -19,7 +19,7 @@ public class AuthController {
      * POST /api/v1/auth/regist
      */
     @PostMapping("/regist")
-    public ResponseEntity<User> regist(@RequestBody User user) {
+    public ResponseEntity<Integer> regist(@RequestBody User user) {
         return ResponseEntity.ok(authService.regist(user));
     }
 
@@ -33,24 +33,48 @@ public class AuthController {
     }
 
     /**
-     * 아이디 조회
-     * GET /api/v1/auth/getUserId?userId={userId}
+     * 회원 정보
+     * GET /api/v1/auth/getUserInfo?userId={userId}
      */
-    @GetMapping("/getUserId")
-    public ResponseEntity<User> selectByUserId(@RequestParam("userId") String userId) {
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<User> getUserInfo(@RequestParam("userId") String userId) {
         User user = new User();
         user.setUserId(userId);
-        return ResponseEntity.ok(authService.selectByUserId(user));
+        user = authService.selectByUserId(user);
+
+        user.setPassword(null);
+        user.setId(null);
+        return ResponseEntity.ok(user);
     }
 
     /**
-     * 이메일 조회
-     * GET /api/v1/auth/getEmail?email={email}
+     * 아이디 중복 검사
+     * GET /api/v1/auth/checkUserId?userId={userId}
      */
-    @GetMapping("/getEmail")
-    public ResponseEntity<User> selectByEmail(@RequestParam("email") String email) {
+    @GetMapping("/checkUserId")
+    public ResponseEntity<Integer> checkUserId(@RequestParam("userId") String userId) {
+        User user = new User();
+        user.setUserId(userId);
+        return ResponseEntity.ok(authService.checkUserId(user));
+    }
+
+    /**
+     * 이메일 중복 검사
+     * GET /api/v1/auth/checkEmail?email={email}
+     */
+    @GetMapping("/checkEmail")
+    public ResponseEntity<Integer> checkEmail(@RequestParam("email") String email) {
         User user = new User();
         user.setEmail(email);
-        return ResponseEntity.ok(authService.selectByEmail(user));
+        return ResponseEntity.ok(authService.checkEmail(user));
+    }
+
+    /**
+     * 회원 정보 업데이트
+     * POST /api/v1/auth/userUpdate
+     */
+    @PostMapping("/userUpdate")
+    public ResponseEntity<Integer> update(@RequestBody User user) {
+        return ResponseEntity.ok(authService.userUpdate(user));
     }
 }

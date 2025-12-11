@@ -21,7 +21,7 @@
     <select id="login" parameterType="com.ssafy.gt.dto.User" >
         SELECT *
         FROM users u
-        WHERE u.user_id = #{userId} AND u.password = #{passowrd}
+        WHERE u.user_id = #{userId} AND u.password = #{password}
     </select>
 
     <!--  selectByUserId -->
@@ -31,8 +31,15 @@
         WHERE u.user_id = #{userId}
     </select>
 
+    <!--  checkUserId -->
+    <select id="checkUserId" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.user_id = #{userId}
+    </select>
+
     <!--  selectByEmail  -->
-    <select id="selectByEmail" parameterType="com.ssafy.gt.dto.User" >
+    <select id="checkEmail" parameterType="com.ssafy.gt.dto.User" >
         SELECT *
         FROM users u
         WHERE u.email = #{email}
