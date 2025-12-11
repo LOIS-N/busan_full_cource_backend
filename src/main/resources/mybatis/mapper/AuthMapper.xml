@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.AuthMapper">
+
+    <!--  Result Map   -->
+    <resultMap id="AuthResultMap" type="com.ssafy.gt.dto.User">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="nickname" column="nickname"/>
+    </resultMap>
+
+    <!--  regist  -->
+    <insert id="regist" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO  users (id, user_id, password, email, nickname)
+        VALUES (#{id}, #{userId}, #{password}, #{email}, #{nickname})
+    </insert>
+
+    <!--  login  -->
+    <select id="login" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.user_id = #{userId} AND u.password = #{passowrd}
+    </select>
+
+    <!--  getUserId -->
+    <select id="getUserId" parameterType="com.ssafy.gt.dto.User" >
+        SELECT u.id
+        FROM users u
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!--  getEmail  -->
+    <select id="getEmail" parameterType="com.ssafy.gt.dto.User" >
+        SELECT u.id
+        FROM users u
+        WHERE u.email = #{email}
+    </select>
+
+    <!--  getByUserId  -->
+    <select id="getUserId" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!--  update  -->
+    <update id="update" parameterType="com.ssafy.gt.dto.User">
+        UPDATE users s
+        SET s.password = #{password},
+            s.email = #{email},
+            s.nickname = #{nickname}
+        WHERE s.user_id = #{userId}
+    </update>
+</mapper>

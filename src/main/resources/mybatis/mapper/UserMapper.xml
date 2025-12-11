@@ -11,8 +11,8 @@
         <result property="nickname" column="nickname"/>
     </resultMap>
 
-    <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
+    <!-- regist -->
+    <insert id="regist" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (user_id, password, email, nickname)
         VALUES (#{userId}, #{password}, #{email}, #{nickname})
     </insert>
