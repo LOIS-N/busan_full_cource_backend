@@ -10,7 +10,7 @@
     </resultMap>
 
     <!-- Insert -->
-    <insert id="insert" parameterType="com.ssafy.gt.dto.ReviewPicture" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertImageUrl" parameterType="com.ssafy.gt.dto.ReviewPicture" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO review_pictures (review_id, picture_path)
         VALUES (#{reviewId}, #{picturePath})
     </insert>

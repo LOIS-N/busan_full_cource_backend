@@ -49,8 +49,8 @@
     <update id="update" parameterType="com.ssafy.gt.dto.User">
         UPDATE users s
         SET s.password = #{password},
-            s.email = #{email},
-            s.nickname = #{nickname}
+        s.email = #{email},
+        s.nickname = #{nickname}
         WHERE s.user_id = #{userId}
     </update>
 </mapper>

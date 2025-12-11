@@ -2,9 +2,11 @@ package com.ssafy.gt.controller;
 
 import com.ssafy.gt.dto.Review;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.gt.service.ReviewService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,11 +19,19 @@ public class ReviewController {
      * 리뷰 등록
      * POST /api/v1/review/
      */
-    @PostMapping
-    public ResponseEntity<Review> addReview(@RequestBody Review review){
-        //reviewService.createReview(review);
-        System.out.println(review);
-        return ResponseEntity.ok(review);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Review> addReview(
+            @ModelAttribute Review review,
+            @RequestPart(value = "images", required = false)List <MultipartFile> images){
+            System.out.println("리뷰 내용: " + review);
+            if(images!=null){
+                System.out.println(images.size() + "개의 이미지");
+                for(MultipartFile file : images){
+                    System.out.println(file.getOriginalFilename());
+                }
+            }
+            reviewService.createReview(review,images);
+            return ResponseEntity.ok(review);
     }
     /**
      * 리뷰 불러오기
@@ -50,13 +60,17 @@ public class ReviewController {
      * 리뷰 수정하기
      * PUT /api/v1/review/{id}
      */
-    @PutMapping("/{id}")
-    public  ResponseEntity<Void> updateReview(
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateReview(
             @PathVariable int id,
-            @RequestBody Review review
-    ){
+            @ModelAttribute Review review,
+            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages,
+            @RequestPart(value = "deleteImageNames", required = false) List<String> deleteImageNames
+    ) {
         review.setId(id);
-        reviewService.update(review);
+
+        reviewService.updateReview(review, newImages, deleteImageNames);
+
         return ResponseEntity.ok().build();
     }
     /**
