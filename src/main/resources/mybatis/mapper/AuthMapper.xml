@@ -24,25 +24,18 @@
         WHERE u.user_id = #{userId} AND u.password = #{passowrd}
     </select>
 
-    <!--  getUserId -->
-    <select id="getUserId" parameterType="com.ssafy.gt.dto.User" >
-        SELECT u.id
-        FROM users u
-        WHERE u.user_id = #{userId}
-    </select>
-
-    <!--  getEmail  -->
-    <select id="getEmail" parameterType="com.ssafy.gt.dto.User" >
-        SELECT u.id
-        FROM users u
-        WHERE u.email = #{email}
-    </select>
-
-    <!--  getByUserId  -->
-    <select id="getUserId" parameterType="com.ssafy.gt.dto.User" >
+    <!--  selectByUserId -->
+    <select id="selectByUserId" parameterType="com.ssafy.gt.dto.User" >
         SELECT *
         FROM users u
         WHERE u.user_id = #{userId}
+    </select>
+
+    <!--  selectByEmail  -->
+    <select id="selectByEmail" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.email = #{email}
     </select>
 
     <!--  update  -->

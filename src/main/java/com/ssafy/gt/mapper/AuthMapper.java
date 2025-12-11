@@ -10,9 +10,9 @@ public interface AuthMapper {
 
     User login(User user);
 
-    User selectByemail(User user);
+    User selectByEmail(User user);
 
-    User selectByid(User user);
+    User selectByUserId(User user);
 
     User update(User user);
 }
