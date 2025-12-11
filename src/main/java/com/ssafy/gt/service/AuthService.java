@@ -21,16 +21,28 @@ public class AuthService {
         /**
          * 로그인
          */
+        public User login(User user) {
+                return authMapper.login(user);
+        }
 
         /**
-         * 아이디 중복 조화
+         * 아이디 조회
          */
+        public User selectByUserId(User user) {
+                return authMapper.selectByUserId(user);
+        }
 
         /**
-         * 이메일 중복 조회
+         * 이메일 조회
          */
+        public User selectByEmail(User user) {
+                return authMapper.selectByEmail(user);
+        }
 
         /**
-         * 회원 정보 조회
+         * 회원정보 수정
          */
+        public User userUpdate(User user) {
+                return authMapper.update(user);
+        }
 }
