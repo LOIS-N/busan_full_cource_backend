@@ -1,11 +1,10 @@
 package com.ssafy.gt.service;
 
 import com.ssafy.gt.dto.Review;
+import com.ssafy.gt.mapper.ReviewPictureMapper;
 import com.ssafy.gt.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -16,13 +15,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 public class ReviewService {
     private final ReviewMapper reviewMapper;
+    private final ReviewPictureMapper reviewPictureMapper;
     /**
     * 리뷰 생성
     */
-    @Transactional
     public int createReview(Review review, List<MultipartFile> images){
 
         int result =  0; //reviewMapper.insert(review);
@@ -49,11 +48,11 @@ public class ReviewService {
                 try {
                     file.transferTo(saveFile);
                     System.out.println("이미지 저장 성공: " + saveFile.getAbsolutePath());
-                    // reviewImageMapper.insert(review.getId(), storeFileName);
+                    reviewPictureMapper.insertImageUrl(review.getId(), storeFileName);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new RuntimeException("이미지 저장 중 오류 발생", e); // 트랜잭션 롤백을 위해 예외 던짐
+                    throw new RuntimeException("이미지 저장 중 오류 발생", e);
                 }
             }
         }
@@ -70,7 +69,53 @@ public class ReviewService {
     /**
      *리뷰 업데이트
      */
-    public int update(Review review){ return reviewMapper.update(review);}
+    public int updateReview(Review review,
+                            List<MultipartFile> newImages,
+                            List<String> deleteImageNames) {
+        int result = reviewMapper.update(review);
+
+        if (deleteImageNames != null && !deleteImageNames.isEmpty()) {
+            String projectPath = System.getProperty("user.dir");
+            String uploadDir = projectPath + "/src/main/resources/static/upload";
+
+            for (String fileName : deleteImageNames) {
+                // DB 삭제
+                //reviewPictureMapper.deleteImageUrl(review.getId(), fileName);
+
+                File target = new File(uploadDir, fileName);
+                if (target.exists()) {
+                    target.delete();
+                }
+            }
+        }
+
+        if (newImages != null && !newImages.isEmpty()) {
+            String projectPath = System.getProperty("user.dir");
+            String uploadDir = projectPath + "/src/main/resources/static/upload";
+
+            File directory = new File(uploadDir);
+            if (!directory.exists()) directory.mkdirs();
+
+            for (MultipartFile file : newImages) {
+                if (file.isEmpty()) continue;
+
+                String originalName = file.getOriginalFilename();
+                String storeFileName = UUID.randomUUID() + "_" + originalName;
+
+                File saveFile = new File(uploadDir, storeFileName);
+
+                try {
+                    file.transferTo(saveFile);
+                    reviewPictureMapper.insertImageUrl(review.getId(), storeFileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("이미지 저장 중 오류 발생", e);
+                }
+            }
+        }
+
+        return result;
+    }
     /**
      *리뷰 삭제
      */

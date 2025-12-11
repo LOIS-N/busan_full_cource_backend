@@ -60,13 +60,17 @@ public class ReviewController {
      * 리뷰 수정하기
      * PUT /api/v1/review/{id}
      */
-    @PutMapping("/{id}")
-    public  ResponseEntity<Void> updateReview(
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateReview(
             @PathVariable int id,
-            @RequestBody Review review
-    ){
+            @ModelAttribute Review review,
+            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages,
+            @RequestPart(value = "deleteImageNames", required = false) List<String> deleteImageNames
+    ) {
         review.setId(id);
-        reviewService.update(review);
+
+        reviewService.updateReview(review, newImages, deleteImageNames);
+
         return ResponseEntity.ok().build();
     }
     /**
