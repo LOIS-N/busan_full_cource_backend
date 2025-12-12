@@ -1,9 +1,13 @@
 package com.ssafy.gt.controller;
 
+import com.ssafy.gt.dto.LoginResponse;
+import com.ssafy.gt.dto.TokenRefreshRequest;
+import com.ssafy.gt.dto.TokenRefreshResponse;
 import com.ssafy.gt.dto.User;
 import com.ssafy.gt.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,16 +23,17 @@ public class AuthController {
      * POST /api/v1/auth/regist
      */
     @PostMapping("/regist")
-    public ResponseEntity<Integer> regist(@RequestBody User user) {
+    public ResponseEntity<User> regist(@RequestBody User user) {
+
         return ResponseEntity.ok(authService.regist(user));
     }
 
     /**
      * 로그인
-     * GET /api/v1/auth/login/
+     * POST /api/v1/auth/login/
      */
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> login(@RequestBody User user) {
         return ResponseEntity.ok(authService.login(user));
     }
 
@@ -76,5 +81,31 @@ public class AuthController {
     @PostMapping("/userUpdate")
     public ResponseEntity<Integer> update(@RequestBody User user) {
         return ResponseEntity.ok(authService.userUpdate(user));
+    }
+
+    /**
+     * Access Token 갱신
+     * POST /api/v1/auth/refresh
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
+        TokenRefreshResponse response = authService.refreshAccessToken(request.getRefreshToken());
+        if (response == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 로그아웃
+     * POST /api/v1/auth/logout
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() != null) {
+            String userId = authentication.getPrincipal().toString();
+            authService.logout(userId);
+        }
+        return ResponseEntity.ok().build();
     }
 }

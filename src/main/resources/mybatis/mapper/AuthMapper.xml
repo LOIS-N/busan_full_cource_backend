@@ -21,7 +21,7 @@
     <select id="login" parameterType="com.ssafy.gt.dto.User" >
         SELECT *
         FROM users u
-        WHERE u.user_id = #{userId} AND u.password = #{password}
+        WHERE u.user_id = #{userId}
     </select>
 
     <!--  selectByUserId -->
