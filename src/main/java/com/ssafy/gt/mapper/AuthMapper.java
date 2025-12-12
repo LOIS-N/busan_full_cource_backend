@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AuthMapper {
 
-    Integer regist(User user);
+    int regist(User user);
 
     User login(User user);
 
