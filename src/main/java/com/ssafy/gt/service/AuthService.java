@@ -44,7 +44,7 @@ public class AuthService {
                 boolean isPasswordMatch = passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
 
                 if (isPasswordMatch) {
-                        String accessToken = jwtUtil.generateToken(dbUser.getUserId());
+                        String accessToken = jwtUtil.generateToken(dbUser.getId());
                         String refreshToken = refreshTokenService.createRefreshToken(dbUser.getUserId());
 
                         dbUser.setPassword(null);
@@ -99,8 +99,8 @@ public class AuthService {
                         return null;
                 }
 
-                String userId = jwtUtil.getUserIdFromToken(refreshToken);
-                String newAccessToken = jwtUtil.generateToken(userId);
+                int id = jwtUtil.getUserIdFromToken(refreshToken);
+                String newAccessToken = jwtUtil.generateToken(id);
 
                 return com.ssafy.gt.dto.TokenRefreshResponse.builder()
                         .accessToken(newAccessToken)

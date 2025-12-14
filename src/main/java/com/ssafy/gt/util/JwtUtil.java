@@ -29,12 +29,12 @@ public class JwtUtil {
     /**
      * JWT 토큰 생성
      */
-    public String generateToken(String userId) {
+    public String generateToken(int id) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
-                .subject(userId)
+                .claim("id", id)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)
@@ -44,14 +44,14 @@ public class JwtUtil {
     /**
      * JWT 토큰에서 userId 추출
      */
-    public String getUserIdFromToken(String token) {
+    public int getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
 
-        return claims.getSubject();
+        return claims.get("id", Integer.class);
     }
 
     /**
