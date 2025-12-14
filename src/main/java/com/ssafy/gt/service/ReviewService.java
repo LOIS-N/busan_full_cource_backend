@@ -3,6 +3,7 @@ package com.ssafy.gt.service;
 import com.ssafy.gt.dto.Review;
 import com.ssafy.gt.mapper.ReviewPictureMapper;
 import com.ssafy.gt.mapper.ReviewMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,47 +16,46 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional(readOnly = true)
 public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final ReviewPictureMapper reviewPictureMapper;
     /**
     * 리뷰 생성
     */
-    public int createReview(Review review, List<MultipartFile> images){
+    @Transactional
+    public int createReview(Review review, List<MultipartFile> images) {
 
-        int result =  0; //reviewMapper.insert(review);
+        int result = reviewMapper.insert(review);
 
-        if(images != null && !images.isEmpty()){
-            String projectPath = System.getProperty("user.dir");
-            String uploadDir = projectPath + "/src/main/resources/static/upload";
+        if (images != null && !images.isEmpty()) {
+
+            String uploadDir = System.getProperty("user.dir")
+                    + "/src/main/resources/static/upload";
 
             File directory = new File(uploadDir);
-            if (!directory.exists()) {
-                boolean wasSuccessful = directory.mkdirs();
-                if (!wasSuccessful) {
-                    System.out.println("디렉토리 생성 실패: " + uploadDir);
-                }
+            if (!directory.exists() && !directory.mkdirs()) {
+                throw new RuntimeException("업로드 디렉토리 생성 실패");
             }
 
-            for(MultipartFile file : images){
-                if(file.isEmpty()) continue;
+            for (MultipartFile file : images) {
+                if (file.isEmpty()) continue;
 
-                String originalName = file.getOriginalFilename();
-                String storeFileName = UUID.randomUUID() + "_" + originalName;
+                String storeFileName =
+                        UUID.randomUUID() + "_" + file.getOriginalFilename();
+
                 File saveFile = new File(uploadDir, storeFileName);
 
                 try {
                     file.transferTo(saveFile);
-                    System.out.println("이미지 저장 성공: " + saveFile.getAbsolutePath());
-                    reviewPictureMapper.insertImageUrl(review.getId(), storeFileName);
-
+                    reviewPictureMapper.insertImageUrl(
+                            review.getId(), storeFileName
+                    );
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("이미지 저장 중 오류 발생", e);
+                    throw new RuntimeException("이미지 저장 실패", e);
                 }
             }
         }
+
         return result;
     }
     /**
