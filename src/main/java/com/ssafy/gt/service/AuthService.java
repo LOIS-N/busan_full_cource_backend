@@ -2,6 +2,7 @@ package com.ssafy.gt.service;
 
 import com.ssafy.gt.dto.LoginResponse;
 import com.ssafy.gt.dto.User;
+import com.ssafy.gt.dto.UserInfoResponse;
 import com.ssafy.gt.mapper.AuthMapper;
 import com.ssafy.gt.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,14 @@ public class AuthService {
                 if (isPasswordMatch) {
                         String accessToken = jwtUtil.generateToken(dbUser.getId());
                         String refreshToken = refreshTokenService.createRefreshToken(dbUser.getUserId());
+                        UserInfoResponse userInfo = UserInfoResponse.builder()
+                                .id(dbUser.getId())
+                                .userId(dbUser.getUserId())
+                                .nickname(dbUser.getNickname())
+                                .email(dbUser.getEmail())
+                                .build();
 
                         dbUser.setPassword(null);
-
                         return LoginResponse.builder()
                                 .accessToken(accessToken)
                                 .refreshToken(refreshToken)

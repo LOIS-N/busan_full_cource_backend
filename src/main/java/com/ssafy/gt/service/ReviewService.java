@@ -61,7 +61,7 @@ public class ReviewService {
     /**
      *타겟으로부터 리뷰 조회
      */
-    public List<Review> getReviewsByTarget(int targetId, int targetType){ return reviewMapper.getReviewsByTarget(targetId,targetType);}
+    public List<Review> getReviewsByTarget(int targetId, String targetType){ return reviewMapper.getReviewsByTarget(targetId,targetType);}
     /**
      *유저로부터 리뷰 조회
      */

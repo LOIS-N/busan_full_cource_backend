@@ -47,10 +47,10 @@ public class ReviewController {
      * 리뷰 불러오기
      * GET /api/v1/review/getReviewByTarget?targetId={targetId}&targetType={targetType}
      */
-    @GetMapping("/getReviewByTarget")
+    @GetMapping("/getReviewsByTarget")
     public ResponseEntity<List<Review>> getReviewsByTarget(
             @RequestParam int targetId,
-            @RequestParam int targetType
+            @RequestParam String targetType
     ) {
         List<Review> reviews = reviewService.getReviewsByTarget(targetId,targetType);
         return ResponseEntity.ok(reviews);

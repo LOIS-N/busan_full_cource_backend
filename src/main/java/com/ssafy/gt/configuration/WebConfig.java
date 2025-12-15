@@ -2,6 +2,7 @@ package com.ssafy.gt.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -14,6 +15,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String rootDir = System.getProperty("user.dir");
+        String uploadPath = "file:///" + rootDir.replace("\\", "/")
+                + "/src/main/resources/static/upload/";
+
+        System.out.println("Mapped Upload Path: " + uploadPath);
+
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations(uploadPath);
+
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
     }
 }
 
