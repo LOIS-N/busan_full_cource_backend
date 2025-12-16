@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ReviewMapper {
     int insert(Review review);
-    List<Review> getReviewsByTarget(int TargetId, int TargetType);
+    List<Review> getReviewsByTarget(int targetId, String targetType);
     List<Review> getReviewsByUserId(int UserId);
+    Review getReviewById(int reviewId);
+    int deleteById(int reviewId);
     int update(Review review);
     int delete(int id);
     double getAverageRatingByTarget(int TargetId, int TargetType);

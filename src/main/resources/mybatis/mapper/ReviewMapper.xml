@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.gt.mapper.PlaceReviewMapper">
+<mapper namespace="com.ssafy.gt.mapper.ReviewMapper">
 
     <!-- Result Map -->
     <resultMap id="ReviewResultMap" type="com.ssafy.gt.dto.Review">
@@ -11,6 +11,17 @@
         <result property="createdAt" column="created_at"/>
         <result property="targetType" column="target_type"/>
         <result property="targetId" column="target_id"/>
+
+        <collection property="pictures"
+                    ofType="com.ssafy.gt.dto.ReviewPicture"
+                    select="selectPicturesByReviewId"
+                    column="id"/>
+    </resultMap>
+
+    <resultMap id="ReviewPictureResultMap" type="com.ssafy.gt.dto.ReviewPicture">
+        <id property="id" column="id"/>
+        <result property="reviewId" column="review_id"/>
+        <result property="picturePath" column="picture_path"/>
     </resultMap>
 
     <!-- Insert -->
@@ -20,12 +31,26 @@
     </insert>
 
     <!-- Select by TargetId And TargetType -->
-    <select id="selectById" parameterType="int" resultMap="ReviewResultMap">
-        SELECT * FROM place_reviews WHERE target_id = #{TargetId} AND target_type = #{TargetType}
+    <select id="getReviewsByTarget" resultMap="ReviewResultMap">
+        SELECT *
+        FROM place_reviews
+        WHERE target_id = #{targetId}
+        AND target_type = #{targetType}
+        ORDER BY created_at DESC
     </select>
 
+    <!--Get Pictures By ReviewId-->
+    <select id="selectPicturesByReviewId"
+            parameterType="int"
+            resultMap="ReviewPictureResultMap">
+        SELECT id, review_id, picture_path
+        FROM review_pictures
+        WHERE review_id = #{reviewId}
+    </select>
+
+
     <!-- Select by User ID -->
-    <select id="selectByUserId" parameterType="int" resultMap="ReviewResultMap">
+    <select id="getReviewsByUserId" parameterType="int" resultMap="ReviewResultMap">
         SELECT * FROM place_reviews WHERE user_id = #{userId}
     </select>
 
@@ -48,5 +73,18 @@
         FROM place_reviews
         WHERE target_type = #{targetType} AND target_id = #{targetId}
     </select>
+
+    <!-- Get Review by ReviewId -->
+    <select id="getReviewById"
+            parameterType="int"
+            resultType="com.ssafy.gt.dto.Review">
+        SELECT * FROM place_reviews WHERE id = #{id}
+    </select>
+
+    <!-- Delete Review by ReviewId -->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM place_reviews WHERE id = #{id}
+    </delete>
+
 
 </mapper>
