@@ -74,4 +74,17 @@
         WHERE target_type = #{targetType} AND target_id = #{targetId}
     </select>
 
+    <!-- Get Review by ReviewId -->
+    <select id="getReviewById"
+            parameterType="int"
+            resultType="com.ssafy.gt.dto.Review">
+        SELECT * FROM place_reviews WHERE id = #{id}
+    </select>
+
+    <!-- Delete Review by ReviewId -->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM place_reviews WHERE id = #{id}
+    </delete>
+
+
 </mapper>

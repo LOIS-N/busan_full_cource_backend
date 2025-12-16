@@ -22,8 +22,6 @@ public class ReviewController {
      * 리뷰 등록
      * POST /api/v1/review/
      */
-
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Review> addReview(
             @ModelAttribute Review review,
@@ -87,10 +85,21 @@ public class ReviewController {
      * DELETE /api/v1/review/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable int id){
-        reviewService.delete(id);
+    public ResponseEntity<Void> deleteReview(
+            @PathVariable int id,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Integer userId = Integer.valueOf(authentication.getName());
+
+        reviewService.deleteReview(id, userId);
+
         return ResponseEntity.ok().build();
     }
+
 
 
 }

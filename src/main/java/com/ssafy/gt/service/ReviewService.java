@@ -6,6 +6,7 @@ import com.ssafy.gt.mapper.ReviewPictureMapper;
 import com.ssafy.gt.mapper.ReviewMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,7 +79,7 @@ public class ReviewService {
         int result = reviewMapper.update(review);
 
         List<ReviewPicture> existingImages =
-                reviewPictureMapper.findByReviewId(Long.valueOf(review.getId()));
+                reviewPictureMapper.findByReviewId(review.getId());
 
         String projectPath = System.getProperty("user.dir");
         String uploadDir = projectPath + "/src/main/resources/static/upload";
@@ -117,7 +118,35 @@ public class ReviewService {
     /**
      *리뷰 삭제
      */
-    public int delete(int reviewId){ return reviewMapper.delete(reviewId);}
+    @Transactional
+    public void deleteReview(int reviewId, int loginUserId) {
+
+        Review review = reviewMapper.getReviewById(reviewId);
+        if (review == null) {
+            throw new RuntimeException("리뷰가 존재하지 않습니다.");
+        }
+
+        if (!review.getUserId().equals(loginUserId)) {
+            throw new AccessDeniedException("삭제 권한이 없습니다.");
+        }
+
+        List<ReviewPicture> pictures =
+                reviewPictureMapper.findByReviewId(reviewId);
+
+        String uploadDir = System.getProperty("user.dir")
+                + "/src/main/resources/static/upload";
+
+        for (ReviewPicture pic : pictures) {
+            File file = new File(uploadDir, pic.getPicturePath());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        reviewPictureMapper.deleteByReviewId(reviewId);
+        reviewMapper.deleteById(reviewId);
+    }
+
     /**
      *평점 조회
      */
