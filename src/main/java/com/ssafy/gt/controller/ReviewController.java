@@ -74,15 +74,14 @@ public class ReviewController {
     public ResponseEntity<Void> updateReview(
             @PathVariable int id,
             @ModelAttribute Review review,
-            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages,
-            @RequestPart(value = "deleteImageNames", required = false) List<String> deleteImageNames
+            @RequestPart(value = "images", required = false) List<MultipartFile> newImages,
+            @RequestPart(value = "keepImageIds", required = false) List<Long> keepImageIds
     ) {
         review.setId(id);
-
-        reviewService.updateReview(review, newImages, deleteImageNames);
-
+        reviewService.updateReview(review, newImages, keepImageIds);
         return ResponseEntity.ok().build();
     }
+
     /**
      * 리뷰 삭제
      * DELETE /api/v1/review/{id}

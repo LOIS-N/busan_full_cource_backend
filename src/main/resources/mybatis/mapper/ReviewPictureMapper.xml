@@ -39,14 +39,20 @@
         WHERE id = #{id}
     </update>
 
-    <!-- Delete -->
-    <delete id="delete" parameterType="int">
-        DELETE FROM review_pictures WHERE id = #{id}
-    </delete>
-
     <!-- Delete by Review ID -->
     <delete id="deleteByReviewId" parameterType="int">
         DELETE FROM review_pictures WHERE review_id = #{reviewId}
     </delete>
 
+    <!--Select Image By Image Id -->
+    <select id="findByReviewId" resultType="com.ssafy.gt.dto.ReviewPicture">
+        SELECT id, review_id, picture_path
+        FROM review_pictures
+        WHERE review_id = #{reviewId}
+    </select>
+
+    <!--Delete Image By Image Id -->
+    <delete id="deleteById">
+        DELETE FROM review_pictures WHERE id = #{id}
+    </delete>
 </mapper>

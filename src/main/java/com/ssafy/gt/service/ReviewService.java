@@ -1,6 +1,7 @@
 package com.ssafy.gt.service;
 
 import com.ssafy.gt.dto.Review;
+import com.ssafy.gt.dto.ReviewPicture;
 import com.ssafy.gt.mapper.ReviewPictureMapper;
 import com.ssafy.gt.mapper.ReviewMapper;
 import jakarta.transaction.Transactional;
@@ -69,53 +70,50 @@ public class ReviewService {
     /**
      *리뷰 업데이트
      */
-    public int updateReview(Review review,
-                            List<MultipartFile> newImages,
-                            List<String> deleteImageNames) {
+    public int updateReview(
+            Review review,
+            List<MultipartFile> newImages,
+            List<Long> keepImageIds
+    ) {
         int result = reviewMapper.update(review);
 
-        if (deleteImageNames != null && !deleteImageNames.isEmpty()) {
-            String projectPath = System.getProperty("user.dir");
-            String uploadDir = projectPath + "/src/main/resources/static/upload";
+        List<ReviewPicture> existingImages =
+                reviewPictureMapper.findByReviewId(Long.valueOf(review.getId()));
 
-            for (String fileName : deleteImageNames) {
-                // DB 삭제
-                //reviewPictureMapper.deleteImageUrl(review.getId(), fileName);
+        String projectPath = System.getProperty("user.dir");
+        String uploadDir = projectPath + "/src/main/resources/static/upload";
 
-                File target = new File(uploadDir, fileName);
-                if (target.exists()) {
-                    target.delete();
-                }
+        for (ReviewPicture img : existingImages) {
+            if (keepImageIds == null || !keepImageIds.contains(img.getId())) {
+                File file = new File(uploadDir, img.getPicturePath());
+                if (file.exists()) file.delete();
+
+                reviewPictureMapper.deleteById(img.getId());
             }
         }
 
         if (newImages != null && !newImages.isEmpty()) {
-            String projectPath = System.getProperty("user.dir");
-            String uploadDir = projectPath + "/src/main/resources/static/upload";
-
-            File directory = new File(uploadDir);
-            if (!directory.exists()) directory.mkdirs();
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
 
             for (MultipartFile file : newImages) {
                 if (file.isEmpty()) continue;
 
-                String originalName = file.getOriginalFilename();
-                String storeFileName = UUID.randomUUID() + "_" + originalName;
-
-                File saveFile = new File(uploadDir, storeFileName);
+                String storeName =
+                        UUID.randomUUID() + "_" + file.getOriginalFilename();
 
                 try {
-                    file.transferTo(saveFile);
-                    reviewPictureMapper.insertImageUrl(review.getId(), storeFileName);
+                    file.transferTo(new File(uploadDir, storeName));
+                    reviewPictureMapper.insertImageUrl(review.getId(), storeName);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("이미지 저장 중 오류 발생", e);
+                    throw new RuntimeException("이미지 저장 실패", e);
                 }
             }
         }
 
         return result;
     }
+
     /**
      *리뷰 삭제
      */
