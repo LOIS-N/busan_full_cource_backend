@@ -56,12 +56,18 @@ public class ReviewController {
 
     /**
      * 본인 작성 리뷰 불러오기
-     * GET /api/v1/review/getReviewByUserId?userId={userId}
+     * GET /api/v1/review/getReviewByUserId
      */
     @GetMapping("/getReviewByUserId")
-    public ResponseEntity<List<Review>> getReviewsByUserId(@RequestParam int userId){
-        List<Review> reviews = reviewService.getReviewsByUserId(userId);
-        return ResponseEntity.ok(reviews);
+    public ResponseEntity<List<Review>> getMyReviews(
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Integer userId = Integer.valueOf(authentication.getName());
+        return ResponseEntity.ok(reviewService.getReviewsByUserId(userId));
     }
 
     /**

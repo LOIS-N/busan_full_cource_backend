@@ -50,7 +50,7 @@
 
 
     <!-- Select by User ID -->
-    <select id="selectByUserId" parameterType="int" resultMap="ReviewResultMap">
+    <select id="getReviewsByUserId" parameterType="int" resultMap="ReviewResultMap">
         SELECT * FROM place_reviews WHERE user_id = #{userId}
     </select>
 
