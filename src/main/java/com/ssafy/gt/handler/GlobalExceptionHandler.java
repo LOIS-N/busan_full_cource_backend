@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralException(Exception e) {
-        Map<String, String> errorResponse = Collections.singletonMap("message", "처리 중 알 수 없는 서버 오류가 발생했습니다.");
+        Map<String, String> errorResponse = Collections.singletonMap("message", e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR) // 500 Internal Server Error

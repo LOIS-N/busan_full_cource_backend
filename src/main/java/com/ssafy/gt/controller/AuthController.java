@@ -1,8 +1,8 @@
 package com.ssafy.gt.controller;
 
-import com.ssafy.gt.dto.LoginResponse;
-import com.ssafy.gt.dto.TokenRefreshRequest;
-import com.ssafy.gt.dto.TokenRefreshResponse;
+import com.ssafy.gt.dto.response.LoginResponse;
+import com.ssafy.gt.dto.request.TokenRefreshRequest;
+import com.ssafy.gt.dto.response.TokenRefreshResponse;
 import com.ssafy.gt.dto.User;
 import com.ssafy.gt.service.AuthService;
 import lombok.RequiredArgsConstructor;

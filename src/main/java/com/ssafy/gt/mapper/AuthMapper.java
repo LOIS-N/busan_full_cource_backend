@@ -16,5 +16,7 @@ public interface AuthMapper {
 
     User selectByUserId(User user);
 
+    int updateUserPassword(User user);
+
     int update(User user);
 }

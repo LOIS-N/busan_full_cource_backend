@@ -1,12 +1,15 @@
-package com.ssafy.gt.dto;
+package com.ssafy.gt.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenRefreshRequest {
+@Builder
+public class TokenRefreshResponse {
+    private String accessToken;
     private String refreshToken;
 }

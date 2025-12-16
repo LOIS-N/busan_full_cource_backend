@@ -53,4 +53,11 @@
         s.nickname = #{nickname}
         WHERE s.user_id = #{userId}
     </update>
+
+    <!-- password update -->
+    <update id="updateUserPassword" parameterType="com.ssafy.gt.dto.User">
+        UPDATE  users u
+        SET u.password = #{password}
+        WHERE u.user_id = #{userId}
+    </update>
 </mapper>

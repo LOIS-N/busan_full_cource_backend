@@ -1,7 +1,8 @@
 package com.ssafy.gt.service;
 
-import com.ssafy.gt.dto.LoginResponse;
+import com.ssafy.gt.dto.response.LoginResponse;
 import com.ssafy.gt.dto.User;
+import com.ssafy.gt.dto.response.TokenRefreshResponse;
 import com.ssafy.gt.mapper.AuthMapper;
 import com.ssafy.gt.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +86,14 @@ public class AuthService {
         }
 
         /**
+         * 이메일 체크
+         */
+        public User selectByEmail(User user) {
+                User getUser = authMapper.checkEmail(user);
+                return getUser;
+        }
+
+        /**
          * 회원정보 수정
          */
         public Integer userUpdate(User user) {
@@ -94,7 +103,7 @@ public class AuthService {
         /**
          * AccessToken 갱신
          */
-        public com.ssafy.gt.dto.TokenRefreshResponse refreshAccessToken(String refreshToken) {
+        public TokenRefreshResponse refreshAccessToken(String refreshToken) {
                 if (!refreshTokenService.validateRefreshToken(refreshToken)) {
                         return null;
                 }
@@ -102,10 +111,21 @@ public class AuthService {
                 int id = jwtUtil.getUserIdFromToken(refreshToken);
                 String newAccessToken = jwtUtil.generateToken(id);
 
-                return com.ssafy.gt.dto.TokenRefreshResponse.builder()
+                return TokenRefreshResponse.builder()
                         .accessToken(newAccessToken)
                         .refreshToken(refreshToken)
                         .build();
+        }
+
+        /**
+         * 비밀번호 변경
+         */
+        public int updateUserPassword(String userId, String password){
+                String encodedPassword = passwordEncoder.encode(password);
+                User user = new User();
+                user.setPassword(encodedPassword);
+                user.setUserId(userId);
+                return authMapper.updateUserPassword(user);
         }
 
         /**
