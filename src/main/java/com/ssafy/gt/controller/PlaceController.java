@@ -65,7 +65,7 @@ public class PlaceController {
 
     /**
      * 검색어로 장소 조회 (거리 기반)
-     * GET /api/v1/place/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}
+     * GET /api/v1/place/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}&userId={userId}
      */
     @GetMapping("/search/{search}")
     public ResponseEntity<List<Place>> search(
@@ -73,9 +73,10 @@ public class PlaceController {
             @RequestParam Double x,
             @RequestParam Double y,
             @RequestParam(required = false) Double dist,
-            @RequestParam(required = false) Integer tag) {
+            @RequestParam(required = false) Integer tag,
+            @RequestParam(required = false) Integer userId) {
         double searchDistance = (dist != null) ? dist : defaultSearchDistance;
-        List<Place> results = placeService.search(search, x, y, searchDistance, tag);
+        List<Place> results = placeService.search(search, x, y, searchDistance, tag, userId);
         return ResponseEntity.ok(results);
     }
 
