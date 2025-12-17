@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/travel")
@@ -66,4 +67,34 @@ public class TravelController {
                 travelService.getTravelPlanById(userId,id)
         );
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateTravel(
+            @PathVariable Integer id,
+            @RequestBody TravelRoute travel,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Integer userId = Integer.valueOf(authentication.getName());
+
+        travel.setId(id);
+        travel.setUserId(userId);
+        travelService.updateTravel(travel);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTravel(
+            @PathVariable Integer id,
+            Authentication authentication
+    ) {
+        Integer userId = Integer.valueOf(authentication.getName());
+        travelService.deleteTravel(userId,id);
+        return ResponseEntity.ok().build();
+    }
+
 }

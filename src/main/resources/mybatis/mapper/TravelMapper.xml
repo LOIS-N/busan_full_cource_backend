@@ -44,14 +44,14 @@
     </select>
 
     <!-- Update -->
-    <update id="update" parameterType="com.ssafy.gt.dto.TravelRoute">
+    <update id="updateTravel" parameterType="com.ssafy.gt.dto.TravelRoute">
         UPDATE travel_routes
         SET route = #{route}
         WHERE id = #{id}
     </update>
 
     <!-- Delete -->
-    <delete id="delete" parameterType="int">
+    <delete id="deleteTravelById" parameterType="int">
         DELETE FROM travel_routes WHERE id = #{id}
     </delete>
 
