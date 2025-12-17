@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.gt.mapper.TravelMapper">
+
+    <!-- Result Map -->
+    <resultMap id="TravelRouteResultMap" type="com.ssafy.gt.dto.TravelRoute">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="route" column="route"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <!-- Insert -->
+    <insert id="insertTravelPlan" parameterType="com.ssafy.gt.dto.TravelRoute">
+        INSERT INTO travel_routes (
+        user_id,
+        title,
+        route,
+        created_at
+        ) VALUES (
+        #{userId},
+        #{title},
+        #{route},
+        #{createdAt}
+        )
+    </insert>
+
+    <!-- Select by User ID -->
+    <select id="getTravelPlansByUser" resultType="com.ssafy.gt.dto.TravelRoute">
+        SELECT
+        id,
+        user_id,
+        title,
+        route,
+        created_at
+        FROM travel_routes
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- Select by Id -->
+    <select id="getTravelPlanById" resultType="com.ssafy.gt.dto.TravelRoute">
+        SELECT * FROM travel_routes WHERE id = #{id}
+    </select>
+
+    <!-- Update -->
+    <update id="updateTravel" parameterType="com.ssafy.gt.dto.TravelRoute">
+        UPDATE travel_routes
+        SET route = #{route}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Delete -->
+    <delete id="deleteTravelById" parameterType="int">
+        DELETE FROM travel_routes WHERE id = #{id}
+    </delete>
+
+</mapper>
