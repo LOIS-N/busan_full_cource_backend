@@ -21,5 +21,12 @@ public class TravelService {
         return travelMapper.getTravelPlansByUser(userId);
     }
 
+    public TravelRoute getTravelPlanById(int userId,int id){
+        TravelRoute travelRoute = travelMapper.getTravelPlanById(id);
+        if(travelRoute == null || ! travelRoute.getUserId().equals(userId)){
+            throw new RuntimeException("비정상적인 접근입니다.");
+        }
+        return travelRoute;
+    }
 
 }

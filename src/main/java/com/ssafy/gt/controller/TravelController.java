@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/trip-plans")
+@RequestMapping("/travel")
 @RequiredArgsConstructor
 public class TravelController {
 
@@ -49,6 +49,21 @@ public class TravelController {
 
         return ResponseEntity.ok(
                 travelService.getTravelPlansByUser(userId)
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TravelRoute> getTravelPlanById(
+            @PathVariable Integer id,
+            Authentication authentication
+    )
+    {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Integer userId = Integer.valueOf(authentication.getName());
+        return ResponseEntity.ok(
+                travelService.getTravelPlanById(userId,id)
         );
     }
 }

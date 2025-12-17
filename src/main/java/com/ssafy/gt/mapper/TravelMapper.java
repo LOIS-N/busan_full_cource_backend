@@ -9,4 +9,5 @@ import java.util.List;
 public interface TravelMapper {
     public int insertTravelPlan(TravelRoute travelRoute);
     List<TravelRoute> getTravelPlansByUser(int userId);
+    TravelRoute getTravelPlanById(int id);
 }

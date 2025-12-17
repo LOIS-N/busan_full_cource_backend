@@ -26,21 +26,21 @@
     </insert>
 
     <!-- Select by User ID -->
-    <select id="selectTravelPlansByUser" resultType="com.ssafy.gt.dto.TravelRoute">
+    <select id="getTravelPlansByUser" resultType="com.ssafy.gt.dto.TravelRoute">
         SELECT
         id,
         user_id,
         title,
         route,
         created_at
-        FROM trip_plan
+        FROM travel_routes
         WHERE user_id = #{userId}
         ORDER BY created_at DESC
     </select>
 
-    <!-- Select All -->
-    <select id="selectAll" resultMap="TravelRouteResultMap">
-        SELECT * FROM travel_routes
+    <!-- Select by Id -->
+    <select id="getTravelPlanById" resultType="com.ssafy.gt.dto.TravelRoute">
+        SELECT * FROM travel_routes WHERE id = #{id}
     </select>
 
     <!-- Update -->
@@ -53,11 +53,6 @@
     <!-- Delete -->
     <delete id="delete" parameterType="int">
         DELETE FROM travel_routes WHERE id = #{id}
-    </delete>
-
-    <!-- Delete by User ID -->
-    <delete id="deleteByUserId" parameterType="int">
-        DELETE FROM travel_routes WHERE user_id = #{userId}
     </delete>
 
 </mapper>
