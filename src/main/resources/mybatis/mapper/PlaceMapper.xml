@@ -88,10 +88,30 @@
         </where>
     </select>
 
+    <!-- Update -->
+    <update id="update" parameterType="com.ssafy.gt.dto.Place">
+        UPDATE places
+        SET tag = #{tag},
+            x = #{x},
+            y = #{y},
+            name = #{name},
+            address = #{address},
+            image_url = #{imageUrl},
+            thumbnail_url = #{thumbnailUrl},
+            average_rating = #{averageRating}
+        WHERE id = #{id}
+    </update>
+
     <!-- Update Average Rating -->
     <update id="updateAverageRating">
         UPDATE places
         SET average_rating = #{averageRating}
         WHERE id = #{id}
     </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM places WHERE id = #{id}
+    </delete>
+
 </mapper>

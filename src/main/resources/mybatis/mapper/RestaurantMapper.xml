@@ -61,15 +61,24 @@
         ORDER BY distance
     </select>
 
-    <!-- Full-Text 검색으로 후보군 추출 -->
+    <!-- 검색 점수 기반 검색 (정확도 우선 정렬) -->
     <select id="findCandidates" resultMap="RestaurantResultMap">
-        SELECT r.*, rt.type as tag_type
+        SELECT r.*, rt.type as tag_type,
+            CASE
+                WHEN r.name = #{keyword} THEN 100
+                WHEN r.name LIKE CONCAT(#{keyword}, '%') THEN 50
+                WHEN r.name LIKE CONCAT('%', #{keyword}, '%') THEN 30
+                WHEN r.address LIKE CONCAT('%', #{keyword}, '%') THEN 10
+                ELSE 0
+            END as relevance_score
         FROM restaurants r
         LEFT JOIN restaurant_tags rt ON r.tag = rt.id
-        WHERE MATCH(r.name, r.address) AGAINST(#{keyword} IN BOOLEAN MODE)
+        WHERE (r.name LIKE CONCAT('%', #{keyword}, '%')
+            OR r.address LIKE CONCAT('%', #{keyword}, '%'))
         <if test="tag != null">
             AND r.tag = #{tag}
         </if>
+        ORDER BY relevance_score DESC, r.average_rating DESC
         LIMIT 1000
     </select>
 

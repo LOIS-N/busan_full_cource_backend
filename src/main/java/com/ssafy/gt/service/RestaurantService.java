@@ -81,77 +81,14 @@ public class RestaurantService {
     }
 
     /**
-     * 식당 검색
+     * 식당 검색 (점수 기반 정렬)
      */
     public List<Restaurant> search(String keyword, Integer tag) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return List.of();
         }
 
-        String lowerKeyword = keyword.toLowerCase();
-        List<Restaurant> candidates;
-
-        // 1단계: Full-Text로 정확한 매치 시도
-        String searchTerm = "*" + keyword + "*";
-        candidates = restaurantMapper.findCandidates(searchTerm, tag);
-
-        // 2단계: Full-Text 결과가 충분하면 그것만 사용 (빠른 검색)
-        if (candidates.size() >= 10) {
-            return candidates.stream()
-                    .map(restaurant -> {
-                        int nameDistance = levenshtein.apply(lowerKeyword, restaurant.getName().toLowerCase());
-                        return new SearchResult(restaurant, nameDistance);
-                    })
-                    .filter(result -> result.distance <= 2)
-                    .sorted(Comparator.comparingInt(r -> r.distance))
-                    .limit(20)
-                    .map(result -> result.restaurant)
-                    .collect(Collectors.toList());
-        }
-
-        // 3단계: Full-Text 결과가 적으면 전체 검색 (오타 처리)
-        candidates = restaurantMapper.selectAllByTag(tag);
-
-        return candidates.stream()
-                .map(restaurant -> {
-                    // name에서 거리 계산
-                    int nameDistance = levenshtein.apply(lowerKeyword, restaurant.getName().toLowerCase());
-
-                    // address를 단어별로 분리해서 최소 거리 찾기
-                    int addressDistance = Integer.MAX_VALUE;
-                    if (restaurant.getAddress() != null) {
-                        String[] words = restaurant.getAddress().toLowerCase().split("[\\s,]+");
-                        for (String word : words) {
-                            int dist = levenshtein.apply(lowerKeyword, word);
-                            if (dist != -1 && dist < addressDistance) {
-                                addressDistance = dist;
-                            }
-                        }
-                    }
-
-                    // 더 가까운 거리 선택 (name 또는 address 중)
-                    int finalDistance = Math.min(
-                            nameDistance != -1 ? nameDistance : Integer.MAX_VALUE,
-                            addressDistance
-                    );
-
-                    return new SearchResult(restaurant, finalDistance);
-                })
-                .filter(result -> result.distance <= 2)  // 거리 2 이내만
-                .sorted(Comparator.comparingInt(r -> r.distance))
-                .limit(20)
-                .map(result -> result.restaurant)
-                .collect(Collectors.toList());
-    }
-
-    // 내부 클래스
-    private static class SearchResult {
-        Restaurant restaurant;
-        int distance;
-
-        SearchResult(Restaurant restaurant, int distance) {
-            this.restaurant = restaurant;
-            this.distance = distance;
-        }
+        // Mapper의 점수 기반 정렬 사용
+        return restaurantMapper.findCandidates(keyword, tag);
     }
 }

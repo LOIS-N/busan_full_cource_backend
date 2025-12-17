@@ -51,7 +51,7 @@ public class PasswordResetService {
         tokenMapper.insertToken(passwordResetToken);
 
         // 6. url생성 및 메일 발송
-        String url = baseUrl + "/password/reset?token=" + token;
+        String url = baseUrl + "?token=" + token;
         emailService.sendPasswordResetEmail(email, url);
 
         return 1;
@@ -68,15 +68,15 @@ public class PasswordResetService {
         PasswordResetToken resetToken = tokenMapper.findByToken(token);
 
         if(resetToken == null) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new IllegalArgumentException("유효하지 않은 링크입니다.");
         }
 
         if(resetToken.getUsed()) {
-            throw new IllegalArgumentException("이미 사용된 토큰입니다.");
+            throw new IllegalArgumentException("이미 사용된 링크입니다.");
         }
 
         if(resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("토큰이 만료되었습니다.");
+            throw new IllegalArgumentException("링크가 만료되었습니다.");
         }
 
         return true;

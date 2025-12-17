@@ -1,6 +1,5 @@
 package com.ssafy.gt.controller;
 
-
 import com.ssafy.gt.dto.request.PasswordChangeRequest;
 import com.ssafy.gt.dto.request.PasswordResetRequest;
 import com.ssafy.gt.service.PasswordResetService;

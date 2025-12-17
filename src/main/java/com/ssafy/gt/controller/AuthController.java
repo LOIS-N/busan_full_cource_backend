@@ -5,6 +5,7 @@ import com.ssafy.gt.dto.request.TokenRefreshRequest;
 import com.ssafy.gt.dto.response.TokenRefreshResponse;
 import com.ssafy.gt.dto.User;
 import com.ssafy.gt.service.AuthService;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,7 +35,13 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody User user) {
-        return ResponseEntity.ok(authService.login(user));
+        LoginResponse loginResponse = authService.login(user);
+
+        if (loginResponse == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(loginResponse);
     }
 
     /**
