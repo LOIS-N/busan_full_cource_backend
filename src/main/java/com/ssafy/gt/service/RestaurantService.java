@@ -81,14 +81,14 @@ public class RestaurantService {
     }
 
     /**
-     * 식당 검색 (점수 기반 정렬)
+     * 식당 검색 (점수 기반 정렬 + 거리 필터링)
      */
-    public List<Restaurant> search(String keyword, Integer tag) {
+    public List<Restaurant> search(String keyword, Double x, Double y, Double dist, Integer tag) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return List.of();
         }
 
-        // Mapper의 점수 기반 정렬 사용
-        return restaurantMapper.findCandidates(keyword, tag);
+        // Mapper의 점수 기반 정렬 + 거리 필터링 사용
+        return restaurantMapper.findCandidatesWithDistance(keyword, x, y, dist, tag);
     }
 }

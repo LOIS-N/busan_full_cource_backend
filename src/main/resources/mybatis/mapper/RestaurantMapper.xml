@@ -66,6 +66,7 @@
         SELECT r.*, rt.type as tag_type,
             CASE
                 WHEN r.name = #{keyword} THEN 100
+                WHEN rt.type LIKE CONCAT('%', #{keyword}, '%') THEN 70
                 WHEN r.name LIKE CONCAT(#{keyword}, '%') THEN 50
                 WHEN r.name LIKE CONCAT('%', #{keyword}, '%') THEN 30
                 WHEN r.address LIKE CONCAT('%', #{keyword}, '%') THEN 10
@@ -74,11 +75,41 @@
         FROM restaurants r
         LEFT JOIN restaurant_tags rt ON r.tag = rt.id
         WHERE (r.name LIKE CONCAT('%', #{keyword}, '%')
-            OR r.address LIKE CONCAT('%', #{keyword}, '%'))
+            OR r.address LIKE CONCAT('%', #{keyword}, '%')
+            OR rt.type LIKE CONCAT('%', #{keyword}, '%'))
         <if test="tag != null">
             AND r.tag = #{tag}
         </if>
         ORDER BY relevance_score DESC, r.average_rating DESC
+        LIMIT 1000
+    </select>
+
+    <!-- 검색 점수 기반 검색 + 거리 필터링 -->
+    <select id="findCandidatesWithDistance" resultMap="RestaurantResultMap">
+        SELECT r.*, rt.type as tag_type,
+            CASE
+                WHEN r.name = #{keyword} THEN 100
+                WHEN rt.type LIKE CONCAT('%', #{keyword}, '%') THEN 70
+                WHEN r.name LIKE CONCAT(#{keyword}, '%') THEN 50
+                WHEN r.name LIKE CONCAT('%', #{keyword}, '%') THEN 30
+                WHEN r.address LIKE CONCAT('%', #{keyword}, '%') THEN 10
+                ELSE 0
+            END as relevance_score,
+            (6371 * acos(
+                cos(radians(#{y})) * cos(radians(r.y)) *
+                cos(radians(r.x) - radians(#{x})) +
+                sin(radians(#{y})) * sin(radians(r.y))
+            )) AS distance
+        FROM restaurants r
+        LEFT JOIN restaurant_tags rt ON r.tag = rt.id
+        WHERE (r.name LIKE CONCAT('%', #{keyword}, '%')
+            OR r.address LIKE CONCAT('%', #{keyword}, '%')
+            OR rt.type LIKE CONCAT('%', #{keyword}, '%'))
+        <if test="tag != null">
+            AND r.tag = #{tag}
+        </if>
+        HAVING distance &lt;= #{dist}
+        ORDER BY relevance_score DESC, distance ASC
         LIMIT 1000
     </select>
 

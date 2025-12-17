@@ -3,6 +3,7 @@ package com.ssafy.gt.controller;
 import com.ssafy.gt.dto.Place;
 import com.ssafy.gt.service.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    @Value("${default.search.distance}")
+    private Double defaultSearchDistance;
+
     /**
      * 거리 기반 장소 검색
      * GET /api/v1/place/getPlaces?x={x}&y={y}&dist={dist}&tag={tag}
@@ -24,9 +28,10 @@ public class PlaceController {
     public ResponseEntity<List<Place>> getPlaces(
             @RequestParam Double x,
             @RequestParam Double y,
-            @RequestParam Double dist,
+            @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag) {
-        List<Place> places = placeService.getPlacesByLocation(x, y, dist, tag);
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Place> places = placeService.getPlacesByLocation(x, y, searchDistance, tag);
         return ResponseEntity.ok(places);
     }
 
@@ -44,24 +49,33 @@ public class PlaceController {
     }
 
     /**
-     * 태그로 장소 조회
-     * GET /api/v1/place/tag/{tag}
+     * 태그로 장소 조회 (거리 기반)
+     * GET /api/v1/place/tag/{tag}?x={x}&y={y}&dist={dist}
      */
     @GetMapping("/tag/{tag}")
-    public ResponseEntity<List<Place>> getPlacesByTag(@PathVariable int tag) {
-        List<Place> places = placeService.getPlacesByTag(tag);
+    public ResponseEntity<List<Place>> getPlacesByTag(
+            @PathVariable int tag,
+            @RequestParam Double x,
+            @RequestParam Double y,
+            @RequestParam(required = false) Double dist) {
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Place> places = placeService.getPlacesByLocation(x, y, searchDistance, tag);
         return ResponseEntity.ok(places);
     }
 
     /**
-     * 검색어로 장소 조회
-     * GET /api/v1/place/search/{search}?tag={tag}
+     * 검색어로 장소 조회 (거리 기반)
+     * GET /api/v1/place/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}
      */
     @GetMapping("/search/{search}")
     public ResponseEntity<List<Place>> search(
             @PathVariable String search,
+            @RequestParam Double x,
+            @RequestParam Double y,
+            @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag) {
-        List<Place> results = placeService.search(search, tag);
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Place> results = placeService.search(search, x, y, searchDistance, tag);
         return ResponseEntity.ok(results);
     }
 

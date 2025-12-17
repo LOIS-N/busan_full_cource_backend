@@ -3,6 +3,7 @@ package com.ssafy.gt.controller;
 import com.ssafy.gt.dto.Restaurant;
 import com.ssafy.gt.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
+    @Value("${default.search.distance}")
+    private Double defaultSearchDistance;
+
     /**
      * 거리 기반 식당 검색
      * GET /api/v1/restaurant/getRestaurants?x={x}&y={y}&dist={dist}&tag={tag}
@@ -24,9 +28,10 @@ public class RestaurantController {
     public ResponseEntity<List<Restaurant>> getRestaurants(
             @RequestParam Double x,
             @RequestParam Double y,
-            @RequestParam Double dist,
+            @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag) {
-        List<Restaurant> restaurants = restaurantService.getRestaurantsByLocation(x, y, dist, tag);
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Restaurant> restaurants = restaurantService.getRestaurantsByLocation(x, y, searchDistance, tag);
         return ResponseEntity.ok(restaurants);
     }
 
@@ -45,23 +50,32 @@ public class RestaurantController {
 
     /**
      * 태그로 식당 조회
-     * GET /api/v1/restaurant/tag/{tag}
+     * GET /api/v1/restaurant/tag/{tag}?x={x}&y={y}&dist={dist}
      */
     @GetMapping("/tag/{tag}")
-    public ResponseEntity<List<Restaurant>> getRestaurantsByTag(@PathVariable int tag) {
-        List<Restaurant> restaurants = restaurantService.getRestaurantsByTag(tag);
+    public ResponseEntity<List<Restaurant>> getRestaurantsByTag(
+            @PathVariable int tag,
+            @RequestParam Double x,
+            @RequestParam Double y,
+            @RequestParam(required = false) Double dist) {
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Restaurant> restaurants = restaurantService.getRestaurantsByLocation(x, y, searchDistance, tag);
         return ResponseEntity.ok(restaurants);
     }
 
     /**
      * 검색어로 식당 조회
-     * GET /api/v1/restaurant/search/{search}?tag={tag}
+     * GET /api/v1/restaurant/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}
      */
     @GetMapping("/search/{search}")
     public ResponseEntity<List<Restaurant>> search(
             @PathVariable String search,
+            @RequestParam Double x,
+            @RequestParam Double y,
+            @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag) {
-        List<Restaurant> results = restaurantService.search(search, tag);
+        double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+        List<Restaurant> results = restaurantService.search(search, x, y, searchDistance, tag);
         return ResponseEntity.ok(results);
     }
 

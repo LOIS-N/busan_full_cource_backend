@@ -20,10 +20,22 @@ public interface PlaceMapper {
     List<Place> selectByTag(int tag);
 
     // Select by Location (거리 기반 검색)
-    List<Place> selectByLocation(@Param("x") Double x, @Param("y") Double y, @Param("dist") Double dist, @Param("tag") Integer tag);
+    List<Place> selectByLocation(
+            @Param("x") Double x, 
+            @Param("y") Double y, 
+            @Param("dist") Double dist, 
+            @Param("tag") Integer tag);
 
     // full-text로 후보군 추출
     List<Place> findCandidates(@Param("keyword") String keyword, @Param("tag") Integer tag);
+
+    // 검색 + 거리 필터링
+    List<Place> findCandidatesWithDistance(
+            @Param("keyword") String keyword,
+            @Param("x") Double x,
+            @Param("y") Double y,
+            @Param("dist") Double dist,
+            @Param("tag") Integer tag);
 
     // Select All
     List<Place> selectAll();

@@ -57,15 +57,55 @@
         ORDER BY distance
     </select>
 
-    <!-- Full-Text 검색으로 후보군 추출 -->
+    <!-- 검색 점수 기반 검색 (정확도 우선 정렬) -->
     <select id="findCandidates" resultMap="PlaceResultMap">
-        SELECT p.*, pt.type as tag_type
+        SELECT p.*, pt.type as tag_type,
+            CASE
+                WHEN p.name = #{keyword} THEN 100
+                WHEN pt.type LIKE CONCAT('%', #{keyword}, '%') THEN 70
+                WHEN p.name LIKE CONCAT(#{keyword}, '%') THEN 50
+                WHEN p.name LIKE CONCAT('%', #{keyword}, '%') THEN 30
+                WHEN p.address LIKE CONCAT('%', #{keyword}, '%') THEN 10
+                ELSE 0
+            END as relevance_score
         FROM places p
-                 LEFT JOIN place_tags pt ON p.tag = pt.id
-        WHERE MATCH(p.name, p.address) AGAINST(#{keyword} IN BOOLEAN MODE)
+        LEFT JOIN place_tags pt ON p.tag = pt.id
+        WHERE (p.name LIKE CONCAT('%', #{keyword}, '%')
+            OR p.address LIKE CONCAT('%', #{keyword}, '%')
+            OR pt.type LIKE CONCAT('%', #{keyword}, '%'))
         <if test="tag != null">
             AND p.tag = #{tag}
         </if>
+        ORDER BY relevance_score DESC, p.average_rating DESC
+        LIMIT 1000
+    </select>
+
+    <!-- 검색 점수 기반 검색 + 거리 필터링 -->
+    <select id="findCandidatesWithDistance" resultMap="PlaceResultMap">
+        SELECT p.*, pt.type as tag_type,
+            CASE
+                WHEN p.name = #{keyword} THEN 100
+                WHEN pt.type LIKE CONCAT('%', #{keyword}, '%') THEN 70
+                WHEN p.name LIKE CONCAT(#{keyword}, '%') THEN 50
+                WHEN p.name LIKE CONCAT('%', #{keyword}, '%') THEN 30
+                WHEN p.address LIKE CONCAT('%', #{keyword}, '%') THEN 10
+                ELSE 0
+            END as relevance_score,
+            (6371 * acos(
+                cos(radians(#{y})) * cos(radians(p.y)) *
+                cos(radians(p.x) - radians(#{x})) +
+                sin(radians(#{y})) * sin(radians(p.y))
+            )) AS distance
+        FROM places p
+        LEFT JOIN place_tags pt ON p.tag = pt.id
+        WHERE (p.name LIKE CONCAT('%', #{keyword}, '%')
+            OR p.address LIKE CONCAT('%', #{keyword}, '%')
+            OR pt.type LIKE CONCAT('%', #{keyword}, '%'))
+        <if test="tag != null">
+            AND p.tag = #{tag}
+        </if>
+        HAVING distance &lt;= #{dist}
+        ORDER BY relevance_score DESC, distance ASC
         LIMIT 1000
     </select>
 
