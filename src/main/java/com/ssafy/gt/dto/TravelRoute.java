@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class TravelRoute {
     private Integer id;
     private Integer userId;
+    private String title;
     private String route;
     private LocalDateTime createdAt;
 }
