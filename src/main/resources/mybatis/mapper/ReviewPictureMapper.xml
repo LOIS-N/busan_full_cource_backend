@@ -16,15 +16,8 @@
     </insert>
 
     <!-- Select by ID -->
-    <select id="selectPicturesByReviewId" resultMap="ReviewPictureResultMap">
-        SELECT *
-        FROM review_pictures
-        WHERE review_id = #{reviewId}
-    </select>
-
-    <!-- Select by Review ID -->
-    <select id="selectByReviewId" parameterType="int" resultMap="ReviewPictureResultMap">
-        SELECT * FROM review_pictures WHERE review_id = #{reviewId}
+    <select id="findById" parameterType="int" resultMap="ReviewPictureResultMap">
+        SELECT * FROM review_pictures WHERE id = #{id}
     </select>
 
     <!-- Select All -->

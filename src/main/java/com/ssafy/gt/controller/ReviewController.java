@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.gt.service.ReviewService;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -78,13 +77,25 @@ public class ReviewController {
     public ResponseEntity<Void> updateReview(
             @PathVariable int id,
             @ModelAttribute Review review,
-            @RequestPart(value = "images", required = false) List<MultipartFile> newImages,
-            @RequestPart(value = "keepImageIds", required = false) List<Long> keepImageIds
+            @RequestParam(value = "images", required = false) List<MultipartFile> newImages,
+            @RequestParam(value = "removeImageIds", required = false) List<Integer> removeImageIds, // 이름 변경
+            Authentication authentication
     ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Integer userId = Integer.valueOf(authentication.getName());
+
         review.setId(id);
-        reviewService.updateReview(review, newImages, keepImageIds);
+        review.setUserId(userId);
+        reviewService.updateReview(review, newImages, removeImageIds);
+
         return ResponseEntity.ok().build();
     }
+
+
+
 
     /**
      * 리뷰 삭제

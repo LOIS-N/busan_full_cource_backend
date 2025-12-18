@@ -71,50 +71,53 @@ public class ReviewService {
     /**
      *리뷰 업데이트
      */
+    @Transactional
     public int updateReview(
             Review review,
             List<MultipartFile> newImages,
-            List<Long> keepImageIds
+            List<Integer> removeImageIds
     ) {
         int result = reviewMapper.update(review);
+        if (removeImageIds != null && !removeImageIds.isEmpty()) {
+            String projectPath = System.getProperty("user.dir");
+            String uploadDir = projectPath + "/src/main/resources/static/upload";
 
-        List<ReviewPicture> existingImages =
-                reviewPictureMapper.findByReviewId(review.getId());
+            for (int imageId : removeImageIds) {
+                ReviewPicture img = reviewPictureMapper.findById(imageId);
 
-        String projectPath = System.getProperty("user.dir");
-        String uploadDir = projectPath + "/src/main/resources/static/upload";
-
-        for (ReviewPicture img : existingImages) {
-            if (keepImageIds == null || !keepImageIds.contains(img.getId())) {
-                File file = new File(uploadDir, img.getPicturePath());
-                if (file.exists()) file.delete();
-
-                reviewPictureMapper.deleteById(img.getId());
+                if (img != null) {
+                    File file = new File(uploadDir, img.getPicturePath());
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    reviewPictureMapper.deleteById(imageId);
+                }
             }
         }
 
         if (newImages != null && !newImages.isEmpty()) {
+            String projectPath = System.getProperty("user.dir");
+            String uploadDir = projectPath + "/src/main/resources/static/upload";
+
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
 
             for (MultipartFile file : newImages) {
                 if (file.isEmpty()) continue;
 
-                String storeName =
-                        UUID.randomUUID() + "_" + file.getOriginalFilename();
+                String storeName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
                 try {
                     file.transferTo(new File(uploadDir, storeName));
                     reviewPictureMapper.insertImageUrl(review.getId(), storeName);
                 } catch (IOException e) {
-                    throw new RuntimeException("이미지 저장 실패", e);
+                    throw new RuntimeException("새 이미지 저장 중 오류 발생", e);
                 }
             }
         }
 
         return result;
     }
-
     /**
      *리뷰 삭제
      */
