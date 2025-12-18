@@ -31,6 +31,13 @@
         WHERE u.user_id = #{userId}
     </select>
 
+    <!--  selectById -->
+    <select id="selectById" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.id = #{id}
+    </select>
+
     <!--  checkUserId -->
     <select id="checkUserId" parameterType="com.ssafy.gt.dto.User" >
         SELECT *

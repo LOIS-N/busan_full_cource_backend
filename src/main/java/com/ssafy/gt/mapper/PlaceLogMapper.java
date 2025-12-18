@@ -13,5 +13,5 @@ public interface PlaceLogMapper {
     int insert(PlaceLog placeLog);
 
     // Select by User ID
-    List<PlaceLog> selectByUserId(@Param("userId") int userId);
+    List<PlaceLog> selectById(@Param("id") int id);
 }

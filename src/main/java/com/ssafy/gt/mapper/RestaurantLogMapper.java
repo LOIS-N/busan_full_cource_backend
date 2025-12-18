@@ -13,5 +13,5 @@ public interface RestaurantLogMapper {
     int insert(RestaurantLog restaurantLog);
 
     // Select by User ID (최근 10개)
-    List<RestaurantLog> selectByUserId(@Param("userId") int userId);
+    List<RestaurantLog> selectById(@Param("id") int id);
 }

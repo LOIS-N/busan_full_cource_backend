@@ -137,7 +137,14 @@ public class AuthService {
         /**
          * 로그아웃 (RefreshToken 삭제)
          */
-        public void logout(String userId) {
-                refreshTokenService.deleteByUserId(userId);
+        public void logout(Integer id) {
+                // int id로 User를 조회하여 userId(로그인 ID)를 얻음
+                User user = new User();
+                user.setId(id);
+                User dbUser = authMapper.selectById(user);
+
+                if (dbUser != null && dbUser.getUserId() != null) {
+                        refreshTokenService.deleteByUserId(dbUser.getUserId());
+                }
         }
 }
