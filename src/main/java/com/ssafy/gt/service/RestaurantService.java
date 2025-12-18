@@ -91,14 +91,14 @@ public class RestaurantService {
      * 식당 검색 (점수 기반 정렬 + 거리 필터링)
      */
     @Transactional
-    public List<Restaurant> search(String keyword, Double x, Double y, Double dist, Integer tag, Integer userId) {
+    public List<Restaurant> search(String keyword, Double x, Double y, Double dist, Integer tag, Integer id) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return List.of();
         }
 
-        // 검색 로그 저장 (userId가 있을 경우에만)
-        if (userId != null) {
-            saveSearchLog(userId, keyword, x, y, dist, tag);
+        // 검색 로그 저장 (id가 있을 경우에만)
+        if (id != null) {
+            saveSearchLog(id, keyword, x, y, dist, tag);
         }
 
         // Mapper의 점수 기반 정렬 + 거리 필터링 사용
@@ -108,7 +108,7 @@ public class RestaurantService {
     /**
      * 검색 로그 저장
      */
-    private void saveSearchLog(Integer userId, String keyword, Double x, Double y, Double dist, Integer tag) {
+    private void saveSearchLog(Integer id, String keyword, Double x, Double y, Double dist, Integer tag) {
         try {
             Map<String, Object> logData = new HashMap<>();
             logData.put("keyword", keyword);
@@ -120,7 +120,7 @@ public class RestaurantService {
             String logJson = objectMapper.writeValueAsString(logData);
 
             RestaurantLog log = RestaurantLog.builder()
-                    .userId(userId)
+                    .userId(id)
                     .log(logJson)
                     .build();
 

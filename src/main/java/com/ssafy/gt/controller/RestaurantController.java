@@ -65,7 +65,7 @@ public class RestaurantController {
 
     /**
      * 검색어로 식당 조회
-     * GET /api/v1/restaurant/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}&userId={userId}
+     * GET /api/v1/restaurant/search/{search}?x={x}&y={y}&dist={dist}&tag={tag}&id={id}
      */
     @GetMapping("/search/{search}")
     public ResponseEntity<List<Restaurant>> search(
@@ -74,9 +74,9 @@ public class RestaurantController {
             @RequestParam Double y,
             @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag,
-            @RequestParam(required = false) Integer userId) {
+            @RequestParam(required = false) Integer id) {
         double searchDistance = (dist != null) ? dist : defaultSearchDistance;
-        List<Restaurant> results = restaurantService.search(search, x, y, searchDistance, tag, userId);
+        List<Restaurant> results = restaurantService.search(search, x, y, searchDistance, tag, id);
         return ResponseEntity.ok(results);
     }
 

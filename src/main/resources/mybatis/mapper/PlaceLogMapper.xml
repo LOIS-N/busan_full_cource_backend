@@ -17,10 +17,10 @@
     </insert>
 
     <!-- Select by User ID (최근 10개) -->
-    <select id="selectByUserId" parameterType="int" resultMap="PlaceLogResultMap">
+    <select id="selectById" parameterType="int" resultMap="PlaceLogResultMap">
         SELECT id, user_id, log, created_at
         FROM place_log
-        WHERE user_id = #{userId}
+        WHERE id = #{id}
         ORDER BY created_at DESC
         LIMIT 10
     </select>
