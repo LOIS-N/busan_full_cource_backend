@@ -25,7 +25,6 @@ public class PlaceService {
     private final PlaceMapper placeMapper;
     private final PlaceLogMapper placeLogMapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final LevenshteinDistance levenshtein = new LevenshteinDistance(3);
 
     /**
      * 거리 기반으로 장소 검색

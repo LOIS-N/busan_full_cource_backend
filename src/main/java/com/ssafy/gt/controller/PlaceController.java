@@ -24,7 +24,7 @@ public class PlaceController {
      * 거리 기반 장소 검색
      * GET /api/v1/place/getPlaces?x={x}&y={y}&dist={dist}&tag={tag}
      */
-    @GetMapping("/getPlaces")
+    @PostMapping("/getPlaces")
     public ResponseEntity<List<Place>> getPlaces(
             @RequestParam Double x,
             @RequestParam Double y,

@@ -18,6 +18,8 @@ public class Place {
     private Double y;
     private String name;
     private String address;
+    private String tel;
+    private String openingHours;
     private String imageUrl;
     private String thumbnailUrl;
     private BigDecimal averageRating;

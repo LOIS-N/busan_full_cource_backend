@@ -29,4 +29,3 @@ application-*.yml
 # 기타
 *.class
 .DS_Store
-*.sql

@@ -10,6 +10,8 @@
         <result property="y" column="y"/>
         <result property="name" column="name"/>
         <result property="address" column="address"/>
+        <result property="tel" column="tel"/>
+        <result property="openingHours" column="opening_hours"/>
         <result property="imageUrl" column="image_url"/>
         <result property="thumbnailUrl" column="thumbnail_url"/>
         <result property="averageRating" column="average_rating"/>
@@ -18,15 +20,16 @@
 
     <!-- Insert -->
     <insert id="insert" parameterType="com.ssafy.gt.dto.Place" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO places (tag, x, y, name, address, image_url, thumbnail_url, average_rating)
-        VALUES (#{tag}, #{x}, #{y}, #{name}, #{address}, #{imageUrl}, #{thumbnailUrl}, #{averageRating})
+        INSERT INTO places (tag, x, y, name, address, tel, opening_hours, image_url, thumbnail_url, average_rating)
+        VALUES (#{tag}, #{x}, #{y}, #{name}, #{address}, #{tel}, #{openingHours}, #{imageUrl}, #{thumbnailUrl}, #{averageRating})
     </insert>
 
     <!-- Select by ID -->
     <select id="selectById" parameterType="int" resultMap="PlaceResultMap">
         SELECT p.*, pt.type as tag_type
         FROM places p
-                 LEFT JOIN place_tags pt ON p.tag = pt.id
+        LEFT JOIN place_tags pt
+        ON p.tag = pt.id
         WHERE p.id = #{id}
     </select>
 
@@ -34,7 +37,8 @@
     <select id="selectByTag" parameterType="int" resultMap="PlaceResultMap">
         SELECT p.*, pt.type as tag_type
         FROM places p
-                 LEFT JOIN place_tags pt ON p.tag = pt.id
+        LEFT JOIN place_tags pt
+        ON p.tag = pt.id
         WHERE p.tag = #{tag}
     </select>
 
@@ -136,6 +140,8 @@
             y = #{y},
             name = #{name},
             address = #{address},
+            tel = #{tel},
+            opening_hours = #{openingHours},
             image_url = #{imageUrl},
             thumbnail_url = #{thumbnailUrl},
             average_rating = #{averageRating}
