@@ -47,7 +47,7 @@ public class AuthService {
 
                 if (isPasswordMatch) {
                         String accessToken = jwtUtil.generateToken(dbUser.getId());
-                        String refreshToken = refreshTokenService.createRefreshToken(dbUser.getUserId());
+                        String refreshToken = refreshTokenService.createRefreshToken(dbUser.getId());
                         UserInfoResponse userInfo = UserInfoResponse.builder()
                                 .id(dbUser.getId())
                                 .userId(dbUser.getUserId())
@@ -138,13 +138,6 @@ public class AuthService {
          * 로그아웃 (RefreshToken 삭제)
          */
         public void logout(Integer id) {
-                // int id로 User를 조회하여 userId(로그인 ID)를 얻음
-                User user = new User();
-                user.setId(id);
-                User dbUser = authMapper.selectById(user);
-
-                if (dbUser != null && dbUser.getUserId() != null) {
-                        refreshTokenService.deleteByUserId(dbUser.getUserId());
-                }
+                refreshTokenService.deleteByUserId(id);
         }
 }

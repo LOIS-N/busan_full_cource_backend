@@ -74,8 +74,18 @@ public class PlaceController {
             @RequestParam Double y,
             @RequestParam(required = false) Double dist,
             @RequestParam(required = false) Integer tag,
-            @RequestParam(required = false) Integer userId) {
+            org.springframework.security.core.Authentication authentication) {
+
+        Integer userId = null;
+
+        // 인증 정보가 존재하고 인증된 상태라면 ID 추출
+        if (authentication != null && authentication.isAuthenticated()) {
+            userId = (Integer) authentication.getPrincipal();
+        }
+
         double searchDistance = (dist != null) ? dist : defaultSearchDistance;
+
+        // userId가 null이면 PlaceService 내의 saveSearchLog가 실행되지 않음
         List<Place> results = placeService.search(search, x, y, searchDistance, tag, userId);
         return ResponseEntity.ok(results);
     }

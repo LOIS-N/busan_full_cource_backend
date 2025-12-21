@@ -64,6 +64,9 @@ public class JwtUtil {
                     .build()
                     .parseSignedClaims(token);
             return true;
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            // 토큰 만료 시 예외를 던져 필터에서 401을 반환
+            throw e;
         } catch (Exception e) {
             return false;
         }
@@ -72,12 +75,12 @@ public class JwtUtil {
     /**
      * Refresh Token 생성
      */
-    public String generateRefreshToken(String userId) {
+    public String generateRefreshToken(Integer id) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshExpirationTime);
 
         return Jwts.builder()
-                .subject(userId)
+                .claim("id", id)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)

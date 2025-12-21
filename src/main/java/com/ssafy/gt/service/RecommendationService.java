@@ -21,53 +21,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class RecommendationService {
 
-    private final RestaurantMapper restaurantMapper;
     private final PlaceMapper placeMapper;
-    private final RestaurantLogMapper restaurantLogMapper;
     private final PlaceLogMapper placeLogMapper;
     private final GeminiService geminiService;
     private final ObjectMapper objectMapper;
 
     @Value("${default.search.distance}")
     private Double defaultDistance;
-
-    /**
-     * AI 기반 음식점 추천
-     */
-    public List<Restaurant> recommendRestaurants(Integer id, Double x, Double y, Double dist, Integer tag) {
-        // 1. 거리 기본값 설정
-        if (dist == null) {
-            dist = defaultDistance;
-        }
-
-        // 2. 사용자의 최근 검색 기록 10개 가져오기
-        List<SimplifiedSearchHistory> userHistory = getUserSearchHistory(id, "restaurant");
-
-        // 3. 현재 위치 주변의 후보 음식점 가져오기
-        List<Restaurant> candidates = restaurantMapper.selectByLocation(x, y, dist, tag);
-
-        // 후보가 없으면 빈 리스트 반환
-        if (candidates == null || candidates.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // 4. 후보 음식점을 SimplifiedPlace로 변환
-        List<SimplifiedPlace> simplifiedCandidates = candidates.stream()
-                .map(r -> SimplifiedPlace.builder()
-                        .id(r.getId())
-                        .name(r.getName())
-                        .tag(r.getTag())
-                        .tagType(r.getTagType())
-                        .build()
-                )
-                .collect(Collectors.toList());
-
-        // 5. AI에게 추천 요청
-        List<Integer> recommendedIds = geminiService.recommendPlaces(userHistory, simplifiedCandidates);
-
-        // 6. 추천 순서대로 원본 데이터 정렬
-        return sortByRecommendedIds(candidates, recommendedIds);
-    }
 
     /**
      * AI 기반 장소 추천
@@ -114,13 +74,7 @@ public class RecommendationService {
         List<SimplifiedSearchHistory> history = new ArrayList<>();
 
         try {
-            if ("restaurant".equals(type)) {
-                List<RestaurantLog> logs = restaurantLogMapper.selectById(id);
-                history = logs.stream()
-                        .map(this::parseRestaurantLog)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
-            } else if ("place".equals(type)) {
+            if ("place".equals(type)) {
                 List<PlaceLog> logs = placeLogMapper.selectById(id);
                 history = logs.stream()
                         .map(this::parsePlaceLog)
@@ -132,25 +86,6 @@ public class RecommendationService {
         }
 
         return history;
-    }
-
-    /**
-     * RestaurantLog를 SimplifiedSearchHistory로 변환
-     */
-    private SimplifiedSearchHistory parseRestaurantLog(RestaurantLog logEntry) {
-        try {
-            Map<String, Object> logData = objectMapper.readValue(logEntry.getLog(), new TypeReference<>() {});
-            String keyword = (String) logData.get("keyword");
-
-            // tag로부터 tagType을 조회할 수도 있지만, 일단 키워드만 사용
-            return SimplifiedSearchHistory.builder()
-                    .searchKeyword(keyword)
-                    .tagType(null) // tagType은 로그에 저장되어 있지 않으므로 null
-                    .build();
-        } catch (Exception e) {
-            log.warn("RestaurantLog 파싱 실패: {}", logEntry.getLog(), e);
-            return null;
-        }
     }
 
     /**
@@ -180,9 +115,7 @@ public class RecommendationService {
 
         for (T candidate : candidates) {
             Integer id = null;
-            if (candidate instanceof Restaurant) {
-                id = ((Restaurant) candidate).getId();
-            } else if (candidate instanceof Place) {
+            if (candidate instanceof Place) {
                 id = ((Place) candidate).getId();
             }
 

@@ -21,11 +21,11 @@ public class RefreshTokenService {
      * RefreshToken 생성 및 저장
      */
     @Transactional
-    public String createRefreshToken(String userId) {
-        String token = jwtUtil.generateRefreshToken(userId);
+    public String createRefreshToken(Integer id) {
+        String token = jwtUtil.generateRefreshToken(id);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .userId(userId)
+                .userId(id)
                 .token(token)
                 .expiresAt(convertToLocalDateTime(jwtUtil.getRefreshTokenExpiryDate()))
                 .build();
@@ -45,8 +45,8 @@ public class RefreshTokenService {
     /**
      * UserId로 RefreshToken 조회
      */
-    public RefreshToken findByUserId(String userId) {
-        return refreshTokenMapper.findByUserId(userId);
+    public RefreshToken findByUserId(Integer id) {
+        return refreshTokenMapper.findByUserId(id);
     }
 
     /**
@@ -69,8 +69,8 @@ public class RefreshTokenService {
      * RefreshToken 삭제
      */
     @Transactional
-    public void deleteByUserId(String userId) {
-        refreshTokenMapper.deleteByUserId(userId);
+    public void deleteByUserId(Integer id) {
+        refreshTokenMapper.deleteByUserId(id);
     }
 
     /**

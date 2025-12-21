@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class RefreshToken {
     private Integer id;
-    private String userId;
+    private Integer userId;  // 변경: String → Integer (users.id FK)
     private String token;
     private LocalDateTime expiresAt;
     private LocalDateTime createdAt;

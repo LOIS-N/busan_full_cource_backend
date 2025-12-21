@@ -32,7 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/v1/review").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/checkEmail",
-                                "/api/v1/auth/checkUserId", "/api/v1/auth/regist").permitAll()
+                                "/api/v1/auth/checkUserId", "/api/v1/auth/regist",
+                                "/api/vi/auth/refresh").permitAll()
                         .requestMatchers("/api/v1/place", "/api/v1/restaurant").permitAll()
                         .requestMatchers("/api/v1/password").permitAll()
                         .anyRequest().permitAll()

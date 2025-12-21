@@ -7,6 +7,7 @@ import com.ssafy.gt.dto.User;
 import com.ssafy.gt.service.AuthService;
 import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -97,7 +98,9 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse response = authService.refreshAccessToken(request.getRefreshToken());
+        log.info("refresh token : {}", response);
         if (response == null) {
+            log.error("refresh token fail");
             return ResponseEntity.status(401).build();
         }
         return ResponseEntity.ok(response);

@@ -30,14 +30,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
-            if (jwtUtil.validateToken(token)) {
-                int id = jwtUtil.getUserIdFromToken(token);
+            try {
+                if (jwtUtil.validateToken(token)) {
+                    int id = jwtUtil.getUserIdFromToken(token);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(id, null, new ArrayList<>());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(id, null, new ArrayList<>());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                // [추가] 토큰이 만료된 경우 401 Unauthorized 응답 후 요청 중단
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"message\": \"Access Token Expired\"}");
+                return;
+            } catch (Exception e) {
+                // 기타 유효하지 않은 토큰은 무시하고 비로그인 상태로 진행
             }
         }
 

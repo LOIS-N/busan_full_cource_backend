@@ -22,16 +22,16 @@
     </select>
 
     <!-- UserId로 RefreshToken 조회 -->
-    <select id="findByUserId" parameterType="String" resultType="com.ssafy.gt.dto.RefreshToken">
+    <select id="findByUserId" parameterType="Integer" resultType="com.ssafy.gt.dto.RefreshToken">
         SELECT id, user_id, token, expires_at, created_at
         FROM refresh_token
-        WHERE user_id = #{userId}
+        WHERE user_id = #{id}
     </select>
 
     <!-- RefreshToken 삭제 -->
-    <delete id="deleteByUserId" parameterType="String">
+    <delete id="deleteByUserId" parameterType="Integer">
         DELETE FROM refresh_token
-        WHERE user_id = #{userId}
+        WHERE user_id = #{id}
     </delete>
 
     <!-- 만료된 RefreshToken 삭제 -->

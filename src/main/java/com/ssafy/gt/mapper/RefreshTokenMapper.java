@@ -19,12 +19,12 @@ public interface RefreshTokenMapper {
     /**
      * UserId로 RefreshToken 조회
      */
-    RefreshToken findByUserId(String userId);
+    RefreshToken findByUserId(Integer id);
 
     /**
      * RefreshToken 삭제
      */
-    void deleteByUserId(String userId);
+    void deleteByUserId(Integer id);
 
     /**
      * 만료된 RefreshToken 삭제
