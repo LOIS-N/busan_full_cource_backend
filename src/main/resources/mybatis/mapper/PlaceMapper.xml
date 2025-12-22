@@ -59,6 +59,7 @@
         </where>
         HAVING distance &lt;= #{dist}
         ORDER BY distance
+        LIMIT 15
     </select>
 
     <!-- 검색 점수 기반 검색 (정확도 우선 정렬) -->

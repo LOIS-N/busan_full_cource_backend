@@ -41,7 +41,7 @@ public class RecommendationService {
         // 2. 사용자의 최근 검색 기록 10개 가져오기
         List<SimplifiedSearchHistory> userHistory = getUserSearchHistory(id, "place");
 
-        // 3. 현재 위치 주변의 후보 장소 가져오기
+        // 3. 현재 위치 주변의 후보 장소 15개 가져오기
         List<Place> candidates = placeMapper.selectByLocation(x, y, dist, tag);
 
         // 후보가 없으면 빈 리스트 반환

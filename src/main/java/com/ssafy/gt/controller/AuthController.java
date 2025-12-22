@@ -98,9 +98,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse response = authService.refreshAccessToken(request.getRefreshToken());
-        log.info("refresh token : {}", response);
         if (response == null) {
-            log.error("refresh token fail");
             return ResponseEntity.status(401).build();
         }
         return ResponseEntity.ok(response);

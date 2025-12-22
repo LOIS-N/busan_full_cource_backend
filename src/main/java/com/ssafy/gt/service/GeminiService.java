@@ -107,8 +107,7 @@ public class GeminiService {
                                 .build()
                 ))
                 .generationConfig(GeminiRequest.GenerationConfig.builder()
-                        .temperature(0.7)
-                        .maxOutputTokens(2048)
+                        .temperature(0.2)
                         .build()
                 )
                 .build();
