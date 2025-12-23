@@ -26,6 +26,13 @@ public interface PlaceMapper {
             @Param("dist") Double dist, 
             @Param("tag") Integer tag);
 
+    // Select Ai Recommendation Place (AI 추천용 장소 탐색)
+    List<Place> selectAiRecommendationPlace(
+            @Param("x") Double x,
+            @Param("y") Double y,
+            @Param("dist") Double dist,
+            @Param("tag") Integer tag);
+
     // full-text로 후보군 추출
     List<Place> findCandidates(@Param("keyword") String keyword, @Param("tag") Integer tag);
 

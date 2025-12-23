@@ -43,7 +43,6 @@
     </select>
 
     <!-- Select by Location (거리 기반 검색) -->
-    <!-- TODO: AI용, 검색용 분리-->
     <select id="selectByLocation" resultMap="PlaceResultMap">
         SELECT p.*, pt.type as tag_type,
                (6371 * acos(
@@ -53,6 +52,25 @@
                        )) AS distance
         FROM places p
                  LEFT JOIN place_tags pt ON p.tag = pt.id
+        <where>
+            <if test="tag != null">
+                AND p.tag = #{tag}
+            </if>
+        </where>
+        HAVING distance &lt;= #{dist}
+        ORDER BY distance
+    </select>
+
+    <!-- Select Ai Recommendation Place (AI 추천용 장소 탐색) -->
+    <select id="selectAiRecommendationPlace" resultMap="PlaceResultMap">
+        SELECT p.*, pt.type as tag_type,
+        (6371 * acos(
+        cos(radians(#{y})) * cos(radians(p.y)) *
+        cos(radians(p.x) - radians(#{x})) +
+        sin(radians(#{y})) * sin(radians(p.y))
+        )) AS distance
+        FROM places p
+        LEFT JOIN place_tags pt ON p.tag = pt.id
         <where>
             <if test="tag != null">
                 AND p.tag = #{tag}

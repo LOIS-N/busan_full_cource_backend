@@ -17,7 +17,7 @@ public class UserController {
 
     /**
      * 회원가입
-     * POST /api/v1/auth/regist
+     * POST /api/v1/user/regist
      */
     @PostMapping("/regist")
     public ResponseEntity<User> regist(@RequestBody User user) {
@@ -27,7 +27,7 @@ public class UserController {
 
     /**
      * 회원 정보
-     * GET /api/v1/auth/getUserInfo?userId={userId}
+     * GET /api/v1/user/getUserInfo?userId={userId}
      */
     @GetMapping("/getUserInfo")
     public ResponseEntity<User> getUserInfo(@RequestParam("userId") String userId) {
@@ -42,7 +42,7 @@ public class UserController {
 
     /**
      * 아이디 중복 검사
-     * GET /api/v1/auth/checkUserId?userId={userId}
+     * GET /api/v1/user/checkUserId?userId={userId}
      */
     @GetMapping("/checkUserId")
     public ResponseEntity<Integer> checkUserId(@RequestParam("userId") String userId) {
@@ -53,7 +53,7 @@ public class UserController {
 
     /**
      * 이메일 중복 검사
-     * GET /api/v1/auth/checkEmail?email={email}
+     * GET /api/v1/user/checkEmail?email={email}
      */
     @GetMapping("/checkEmail")
     public ResponseEntity<Integer> checkEmail(@RequestParam("email") String email) {
@@ -64,7 +64,7 @@ public class UserController {
 
     /**
      * 회원 정보 업데이트
-     * POST /api/v1/auth/userUpdate
+     * POST /api/v1/user/userUpdate
      */
     @PostMapping("/userUpdate")
     public ResponseEntity<Integer> update(@RequestBody User user) {
