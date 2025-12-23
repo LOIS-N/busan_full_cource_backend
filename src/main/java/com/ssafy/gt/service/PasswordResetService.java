@@ -87,9 +87,7 @@ public class PasswordResetService {
         validateToken(token);
 
         PasswordResetToken resetToken = tokenMapper.findByToken(token);
-        User user = new User();
-        user.setUserId(resetToken.getUserId());
-        User getUser = userService.selectByUserId(user);
+        User getUser = userService.selectByUserId(resetToken.getUserId());
 
         userService.updateUserPassword(getUser.getUserId(), newPassword);
 

@@ -18,7 +18,7 @@
     </insert>
 
     <!--  selectByUserId -->
-    <select id="selectByUserId" parameterType="com.ssafy.gt.dto.User" >
+    <select id="selectByUserId" parameterType="String" resultType="com.ssafy.gt.dto.User">
         SELECT *
         FROM users u
         WHERE u.user_id = #{userId}

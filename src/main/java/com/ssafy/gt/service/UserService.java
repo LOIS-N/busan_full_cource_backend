@@ -30,8 +30,8 @@ public class UserService {
     /**
      * 회원정보 조회
      */
-    public User selectByUserId(User user) {
-        return userMapper.selectByUserId(user);
+    public User selectByUserId(String userId) {
+        return userMapper.selectByUserId(userId);
     }
 
     /**

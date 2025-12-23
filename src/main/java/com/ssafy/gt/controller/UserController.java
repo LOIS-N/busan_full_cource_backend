@@ -1,6 +1,7 @@
 package com.ssafy.gt.controller;
 
 import com.ssafy.gt.dto.User;
+import com.ssafy.gt.dto.response.UserResponse;
 import com.ssafy.gt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +31,17 @@ public class UserController {
      * GET /api/v1/user/getUserInfo?userId={userId}
      */
     @GetMapping("/getUserInfo")
-    public ResponseEntity<User> getUserInfo(@RequestParam("userId") String userId) {
-        User user = new User();
-        user.setUserId(userId);
-        user = userService.selectByUserId(user);
+    public ResponseEntity<UserResponse> getUserInfo(@RequestParam("userId") String userId) {
+        User user = userService.selectByUserId(userId);
 
-        user.setPassword(null);
-        user.setId(null);
-        return ResponseEntity.ok(user);
+        // TODO: id 필요없으면 삭제
+        UserResponse response = UserResponse.builder()
+                .id(user.getId())
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     /**

@@ -10,7 +10,7 @@ public interface UserMapper {
 
     User checkEmail(User user);
 
-    User selectByUserId(User user);
+    User selectByUserId(String userId);
 
     int update(User user);
 

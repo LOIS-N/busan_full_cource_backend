@@ -1,11 +1,12 @@
 package com.ssafy.gt.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 @Builder
-public class UserInfoResponse {
+public class UserResponse {
     private int id;
     private String userId;
     private String nickname;
