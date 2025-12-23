@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/travel")
+@RequestMapping("api/vi/travel")
 @RequiredArgsConstructor
 public class TravelController {
 
