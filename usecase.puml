@@ -1,0 +1,60 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "사용자 (User)" as User
+actor "관리자 (Admin)" as Admin
+actor "Gemini AI" as AI <<System>>
+actor "Email 서버" as Email <<System>>
+
+rectangle "부산 풀코스 여행 시스템" {
+    package "인증 및 계정" {
+        usecase "회원가입" as UC_Register
+        usecase "로그인" as UC_Login
+        usecase "회원정보 수정" as UC_UpdateUser
+        usecase "비밀번호 재설정 요청" as UC_PwdResetReq
+        usecase "비밀번호 변경" as UC_PwdReset
+    }
+
+    package "장소 및 추천" {
+        usecase "장소 검색 및 조회" as UC_PlaceSearch
+        usecase "AI 맞춤 장소 추천 받기" as UC_AI_Recommend
+        usecase "장소 정보 관리 (C/U/D)" as UC_PlaceManage
+    }
+
+    package "여행 계획 및 리뷰" {
+        usecase "여행 계획(루트) 생성" as UC_CreateTravel
+        usecase "여행 계획 수정/삭제" as UC_ManageTravel
+        usecase "리뷰 작성 (사진 첨부)" as UC_WriteReview
+        usecase "리뷰 수정/삭제" as UC_ManageReview
+    }
+
+    ' 관계 설정 (Include)
+    UC_UpdateUser ..> UC_Login : <<include>>
+    UC_CreateTravel ..> UC_Login : <<include>>
+    UC_WriteReview ..> UC_Login : <<include>>
+    UC_ManageTravel ..> UC_Login : <<include>>
+    UC_ManageReview ..> UC_Login : <<include>>
+}
+
+' 액터와 유스케이스 연결
+User -- UC_Register
+User -- UC_Login
+User -- UC_UpdateUser
+User -- UC_PwdResetReq
+User -- UC_PwdReset
+User -- UC_PlaceSearch
+User -- UC_AI_Recommend
+User -- UC_CreateTravel
+User -- UC_ManageTravel
+User -- UC_WriteReview
+User -- UC_ManageReview
+
+' 관리자 기능
+Admin -- UC_PlaceManage
+
+' 외부 시스템 연결
+UC_PwdResetReq -- Email
+UC_AI_Recommend -- AI
+
+@enduml
