@@ -71,7 +71,7 @@
     <select id="getAverageRatingByTarget" resultType="java.math.BigDecimal">
         SELECT AVG(rating)
         FROM place_reviews
-        WHERE target_type = #{targetType} AND target_id = #{targetId}
+        WHERE target_id = #{targetId}
     </select>
 
     <!-- Get Review by ReviewId -->

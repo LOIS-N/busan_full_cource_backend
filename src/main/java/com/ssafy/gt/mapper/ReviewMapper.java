@@ -2,6 +2,7 @@ package com.ssafy.gt.mapper;
 
 import com.ssafy.gt.dto.Review;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ReviewMapper {
@@ -12,6 +13,6 @@ public interface ReviewMapper {
     int deleteById(int reviewId);
     int update(Review review);
     int delete(int id);
-    double getAverageRatingByTarget(int TargetId, int TargetType);
+    BigDecimal getAverageRatingByTarget(int TargetId);
 
 }

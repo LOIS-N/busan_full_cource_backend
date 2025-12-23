@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final ReviewPictureMapper reviewPictureMapper;
+    private final PlaceService placeService;
     /**
     * 리뷰 생성
     */
@@ -57,7 +59,8 @@ public class ReviewService {
                 }
             }
         }
-
+        BigDecimal averRageRating = reviewMapper.getAverageRatingByTarget(review.getTargetId());
+        placeService.updateAverageRating(review.getTargetId(),averRageRating);
         return result;
     }
     /**
@@ -115,7 +118,8 @@ public class ReviewService {
                 }
             }
         }
-
+        BigDecimal averRageRating = reviewMapper.getAverageRatingByTarget(review.getTargetId());
+        placeService.updateAverageRating(review.getTargetId(),averRageRating);
         return result;
     }
     /**
@@ -125,6 +129,7 @@ public class ReviewService {
     public void deleteReview(int reviewId, int loginUserId) {
 
         Review review = reviewMapper.getReviewById(reviewId);
+        int placeId = review.getTargetId();
         if (review == null) {
             throw new RuntimeException("리뷰가 존재하지 않습니다.");
         }
@@ -145,15 +150,17 @@ public class ReviewService {
                 file.delete();
             }
         }
-
         reviewPictureMapper.deleteByReviewId(reviewId);
         reviewMapper.deleteById(reviewId);
+        BigDecimal averRageRating = reviewMapper.getAverageRatingByTarget(placeId);
+        if(averRageRating==null) averRageRating=BigDecimal.ZERO;
+        placeService.updateAverageRating(placeId,averRageRating);
     }
 
     /**
      *평점 조회
      */
-    public double getAverageRatingByTarget(int targetId, int targetType){ return reviewMapper.getAverageRatingByTarget(targetId,targetType);}
+    public BigDecimal getAverageRatingByTarget(int targetId){ return reviewMapper.getAverageRatingByTarget(targetId);}
 
 
 }
