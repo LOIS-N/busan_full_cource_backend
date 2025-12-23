@@ -20,20 +20,6 @@ public class AuthService {
         private final RefreshTokenService refreshTokenService;
 
         /**
-         * 회원가입
-         */
-        public User regist(User user) {
-                String encodedPassword = passwordEncoder.encode(user.getPassword());
-                user.setPassword(encodedPassword);
-
-                authMapper.regist(user);
-
-                user.setPassword(null);
-
-                return user;
-        }
-
-        /**
          * 로그인
          */
         public LoginResponse login(User user) {
@@ -67,45 +53,6 @@ public class AuthService {
         }
 
         /**
-         * 회원정보 조회
-         */
-        public User selectByUserId(User user) {
-                return authMapper.selectByUserId(user);
-        }
-
-        /**
-         * 아이디 중복 검사
-         */
-        public Integer checkUserId(User user) {
-                User Checkuser = authMapper.checkUserId(user);
-                if(Checkuser != null) { return 1; }
-                return 0;
-        }
-
-        /**
-         * 이메일 중복 검사
-         */
-        public Integer checkEmail(User user) {
-                User Checkuser = authMapper.checkEmail(user);
-                if(Checkuser != null) { return 1; }
-                return 0;
-        }
-
-        /**
-         * 이메일 체크
-         */
-        public User selectByEmail(User user) {
-            return authMapper.checkEmail(user);
-        }
-
-        /**
-         * 회원정보 수정
-         */
-        public Integer userUpdate(User user) {
-                return authMapper.update(user);
-        }
-
-        /**
          * AccessToken 갱신
          */
         public TokenRefreshResponse refreshAccessToken(String refreshToken) {
@@ -120,17 +67,6 @@ public class AuthService {
                         .accessToken(newAccessToken)
                         .refreshToken(refreshToken)
                         .build();
-        }
-
-        /**
-         * 비밀번호 변경
-         */
-        public int updateUserPassword(String userId, String password){
-                String encodedPassword = passwordEncoder.encode(password);
-                User user = new User();
-                user.setPassword(encodedPassword);
-                user.setUserId(userId);
-                return authMapper.updateUserPassword(user);
         }
 
         /**

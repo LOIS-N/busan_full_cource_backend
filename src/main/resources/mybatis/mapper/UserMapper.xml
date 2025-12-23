@@ -11,44 +11,53 @@
         <result property="nickname" column="nickname"/>
     </resultMap>
 
-    <!-- regist -->
+    <!--  regist  -->
     <insert id="regist" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO users (user_id, password, email, nickname)
-        VALUES (#{userId}, #{password}, #{email}, #{nickname})
+        INSERT INTO  users (id, user_id, password, email, nickname)
+        VALUES (#{id}, #{userId}, #{password}, #{email}, #{nickname})
     </insert>
 
-    <!-- Select by ID -->
-    <select id="selectById" parameterType="int" resultMap="UserResultMap">
-        SELECT * FROM users WHERE id = #{id}
+    <!--  selectByUserId -->
+    <select id="selectByUserId" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.user_id = #{userId}
     </select>
 
-    <!-- Select by User ID -->
-    <select id="selectByUserId" parameterType="string" resultMap="UserResultMap">
-        SELECT * FROM users WHERE user_id = #{userId}
+    <!--  selectById -->
+    <select id="selectById" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.id = #{id}
     </select>
 
-    <!-- Select by Email -->
-    <select id="selectByEmail" parameterType="string" resultMap="UserResultMap">
-        SELECT * FROM users WHERE email = #{email}
+    <!--  checkUserId -->
+    <select id="checkUserId" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.user_id = #{userId}
     </select>
 
-    <!-- Select All -->
-    <select id="selectAll" resultMap="UserResultMap">
-        SELECT * FROM users
+    <!--  selectByEmail  -->
+    <select id="checkEmail" parameterType="com.ssafy.gt.dto.User" >
+        SELECT *
+        FROM users u
+        WHERE u.email = #{email}
     </select>
 
-    <!-- Update -->
+    <!--  update  -->
     <update id="update" parameterType="com.ssafy.gt.dto.User">
-        UPDATE users
-        SET password = #{password},
-            email = #{email},
-            nickname = #{nickname}
-        WHERE id = #{id}
+        UPDATE users s
+        SET s.password = #{password},
+            s.email = #{email},
+            s.nickname = #{nickname}
+        WHERE s.user_id = #{userId}
     </update>
 
-    <!-- Delete -->
-    <delete id="delete" parameterType="int">
-        DELETE FROM users WHERE id = #{id}
-    </delete>
-
+    <!-- password update -->
+    <update id="updateUserPassword" parameterType="com.ssafy.gt.dto.User">
+        UPDATE  users u
+        SET u.password = #{password}
+        WHERE u.user_id = #{userId}
+    </update>
 </mapper>
