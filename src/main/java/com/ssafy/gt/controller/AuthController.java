@@ -5,7 +5,6 @@ import com.ssafy.gt.dto.request.TokenRefreshRequest;
 import com.ssafy.gt.dto.response.TokenRefreshResponse;
 import com.ssafy.gt.dto.User;
 import com.ssafy.gt.service.AuthService;
-import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

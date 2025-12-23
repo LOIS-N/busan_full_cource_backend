@@ -7,9 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface TravelMapper {
-    public int insertTravelPlan(TravelRoute travelRoute);
+    int insertTravelPlan(TravelRoute travelRoute);
     List<TravelRoute> getTravelPlansByUser(int userId);
     TravelRoute getTravelPlanById(int id);
-    public int updateTravel(TravelRoute travel);
-    public void deleteTravelById(int id);
+    int updateTravel(TravelRoute travel);
+    void deleteTravelById(int id);
 }

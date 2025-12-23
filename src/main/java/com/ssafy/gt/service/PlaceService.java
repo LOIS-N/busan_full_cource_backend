@@ -6,7 +6,6 @@ import com.ssafy.gt.mapper.PlaceMapper;
 import com.ssafy.gt.mapper.PlaceLogMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +13,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

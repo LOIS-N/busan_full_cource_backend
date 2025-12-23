@@ -95,8 +95,7 @@ public class AuthService {
          * 이메일 체크
          */
         public User selectByEmail(User user) {
-                User getUser = authMapper.checkEmail(user);
-                return getUser;
+            return authMapper.checkEmail(user);
         }
 
         /**
