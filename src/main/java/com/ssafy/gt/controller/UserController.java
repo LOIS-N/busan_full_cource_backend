@@ -3,6 +3,7 @@ package com.ssafy.gt.controller;
 import com.ssafy.gt.dto.User;
 import com.ssafy.gt.dto.response.UserResponse;
 import com.ssafy.gt.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
      * POST /api/v1/user/regist
      */
     @PostMapping("/regist")
-    public ResponseEntity<User> regist(@RequestBody User user) {
+    public ResponseEntity<User> regist(@Valid @RequestBody User user) {
 
         return ResponseEntity.ok(userService.regist(user));
     }
