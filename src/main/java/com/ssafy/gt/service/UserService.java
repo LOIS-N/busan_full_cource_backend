@@ -30,15 +30,15 @@ public class UserService {
     /**
      * 회원정보 조회
      */
-    public User selectByUserId(String userId) {
-        return userMapper.selectByUserId(userId);
+    public User selectById(Integer id) {
+        return userMapper.selectById(id);
     }
 
     /**
      * 아이디 중복 검사
      */
-    public Integer checkUserId(User user) {
-        User Checkuser = userMapper.checkUserId(user);
+    public Integer checkUserId(String userId) {
+        User Checkuser = userMapper.checkUserId(userId);
         if(Checkuser != null) { return 1; }
         return 0;
     }
@@ -46,8 +46,8 @@ public class UserService {
     /**
      * 이메일 중복 검사
      */
-    public Integer checkEmail(User user) {
-        User Checkuser = userMapper.checkEmail(user);
+    public Integer checkEmail(String email) {
+        User Checkuser = userMapper.checkEmail(email);
         if(Checkuser != null) { return 1; }
         return 0;
     }
@@ -55,8 +55,8 @@ public class UserService {
     /**
      * 이메일 체크
      */
-    public User selectByEmail(User user) {
-        return userMapper.checkEmail(user);
+    public User selectByEmail(String email) {
+        return userMapper.checkEmail(email);
     }
 
     /**

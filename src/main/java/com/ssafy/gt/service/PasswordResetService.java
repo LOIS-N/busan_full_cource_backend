@@ -26,9 +26,7 @@ public class PasswordResetService {
     @Transactional
     public int createPasswordResetToken(String email) {
         // 1. 사용자 확인
-        User user = new User();
-        user.setEmail(email);
-        User getUser = userService.selectByEmail(user);
+        User getUser = userService.selectByEmail(email);
         if (getUser == null) {
             return 0;
         }
@@ -87,7 +85,7 @@ public class PasswordResetService {
         validateToken(token);
 
         PasswordResetToken resetToken = tokenMapper.findByToken(token);
-        User getUser = userService.selectByUserId(resetToken.getUserId());
+        User getUser = userService.selectById(resetToken.getId());
 
         userService.updateUserPassword(getUser.getUserId(), newPassword);
 

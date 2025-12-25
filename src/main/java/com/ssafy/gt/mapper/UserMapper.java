@@ -6,11 +6,11 @@ public interface UserMapper {
 
     int regist(User user);
 
-    User checkUserId(User user);
+    User checkUserId(String userId);
 
-    User checkEmail(User user);
+    User checkEmail(String email);
 
-    User selectByUserId(String userId);
+    User selectById(Integer id);
 
     int update(User user);
 

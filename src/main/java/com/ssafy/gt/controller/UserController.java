@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,10 +33,9 @@ public class UserController {
      * GET /api/v1/user/getUserInfo?userId={userId}
      */
     @GetMapping("/getUserInfo")
-    public ResponseEntity<UserResponse> getUserInfo(@RequestParam("userId") String userId) {
-        User user = userService.selectByUserId(userId);
+    public ResponseEntity<UserResponse> getUserInfo(@AuthenticationPrincipal Integer id) {
+        User user = userService.selectById(id);
 
-        // TODO: id 필요없으면 삭제
         UserResponse response = UserResponse.builder()
                 .id(user.getId())
                 .userId(user.getUserId())
@@ -51,9 +51,7 @@ public class UserController {
      */
     @GetMapping("/checkUserId")
     public ResponseEntity<Integer> checkUserId(@RequestParam("userId") String userId) {
-        User user = new User();
-        user.setUserId(userId);
-        return ResponseEntity.ok(userService.checkUserId(user));
+        return ResponseEntity.ok(userService.checkUserId(userId));
     }
 
     /**
@@ -62,9 +60,7 @@ public class UserController {
      */
     @GetMapping("/checkEmail")
     public ResponseEntity<Integer> checkEmail(@RequestParam("email") String email) {
-        User user = new User();
-        user.setEmail(email);
-        return ResponseEntity.ok(userService.checkEmail(user));
+        return ResponseEntity.ok(userService.checkEmail(email));
     }
 
     /**
@@ -72,7 +68,10 @@ public class UserController {
      * POST /api/v1/user/userUpdate
      */
     @PostMapping("/userUpdate")
-    public ResponseEntity<Integer> update(@RequestBody User user) {
+    public ResponseEntity<Integer> update(
+            @AuthenticationPrincipal Integer id,
+            @RequestBody User user) {
+        user.setId(id);
         return ResponseEntity.ok(userService.userUpdate(user));
     }
 

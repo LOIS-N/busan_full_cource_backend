@@ -32,14 +32,14 @@
     </select>
 
     <!--  checkUserId -->
-    <select id="checkUserId" parameterType="com.ssafy.gt.dto.User" >
+    <select id="checkUserId" parameterType="String" >
         SELECT *
         FROM users u
         WHERE u.user_id = #{userId}
     </select>
 
     <!--  selectByEmail  -->
-    <select id="checkEmail" parameterType="com.ssafy.gt.dto.User" >
+    <select id="checkEmail" parameterType="String" >
         SELECT *
         FROM users u
         WHERE u.email = #{email}
