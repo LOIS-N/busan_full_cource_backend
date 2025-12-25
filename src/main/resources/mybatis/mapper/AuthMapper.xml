@@ -2,20 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.gt.mapper.AuthMapper">
 
-    <!--  Result Map   -->
-    <resultMap id="AuthResultMap" type="com.ssafy.gt.dto.User">
-        <id property="id" column="id"/>
-        <result property="userId" column="userId"/>
-        <result property="password" column="password"/>
-        <result property="email" column="email"/>
-        <result property="nickname" column="nickname"/>
-    </resultMap>
-
-    <!--  regist  -->
-    <insert id="regist" parameterType="com.ssafy.gt.dto.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO  users (id, user_id, password, email, nickname)
-        VALUES (#{id}, #{userId}, #{password}, #{email}, #{nickname})
-    </insert>
+<!--    &lt;!&ndash;  Result Map   &ndash;&gt;-->
+<!--    <resultMap id="AuthResultMap" type="com.ssafy.gt.dto.User">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="userId" column="userId"/>-->
+<!--        <result property="password" column="password"/>-->
+<!--        <result property="email" column="email"/>-->
+<!--        <result property="nickname" column="nickname"/>-->
+<!--    </resultMap>-->
 
     <!--  login  -->
     <select id="login" parameterType="com.ssafy.gt.dto.User" >
@@ -23,48 +17,4 @@
         FROM users u
         WHERE u.user_id = #{userId}
     </select>
-
-    <!--  selectByUserId -->
-    <select id="selectByUserId" parameterType="com.ssafy.gt.dto.User" >
-        SELECT *
-        FROM users u
-        WHERE u.user_id = #{userId}
-    </select>
-
-    <!--  selectById -->
-    <select id="selectById" parameterType="com.ssafy.gt.dto.User" >
-        SELECT *
-        FROM users u
-        WHERE u.id = #{id}
-    </select>
-
-    <!--  checkUserId -->
-    <select id="checkUserId" parameterType="com.ssafy.gt.dto.User" >
-        SELECT *
-        FROM users u
-        WHERE u.user_id = #{userId}
-    </select>
-
-    <!--  selectByEmail  -->
-    <select id="checkEmail" parameterType="com.ssafy.gt.dto.User" >
-        SELECT *
-        FROM users u
-        WHERE u.email = #{email}
-    </select>
-
-    <!--  update  -->
-    <update id="update" parameterType="com.ssafy.gt.dto.User">
-        UPDATE users s
-        SET s.password = #{password},
-        s.email = #{email},
-        s.nickname = #{nickname}
-        WHERE s.user_id = #{userId}
-    </update>
-
-    <!-- password update -->
-    <update id="updateUserPassword" parameterType="com.ssafy.gt.dto.User">
-        UPDATE  users u
-        SET u.password = #{password}
-        WHERE u.user_id = #{userId}
-    </update>
 </mapper>

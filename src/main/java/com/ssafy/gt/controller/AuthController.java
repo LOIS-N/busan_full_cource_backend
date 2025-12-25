@@ -20,16 +20,6 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * 회원가입
-     * POST /api/v1/auth/regist
-     */
-    @PostMapping("/regist")
-    public ResponseEntity<User> regist(@RequestBody User user) {
-
-        return ResponseEntity.ok(authService.regist(user));
-    }
-
-    /**
      * 로그인
      * POST /api/v1/auth/login/
      */
@@ -44,51 +34,7 @@ public class AuthController {
         return ResponseEntity.ok(loginResponse);
     }
 
-    /**
-     * 회원 정보
-     * GET /api/v1/auth/getUserInfo?userId={userId}
-     */
-    @GetMapping("/getUserInfo")
-    public ResponseEntity<User> getUserInfo(@RequestParam("userId") String userId) {
-        User user = new User();
-        user.setUserId(userId);
-        user = authService.selectByUserId(user);
 
-        user.setPassword(null);
-        user.setId(null);
-        return ResponseEntity.ok(user);
-    }
-
-    /**
-     * 아이디 중복 검사
-     * GET /api/v1/auth/checkUserId?userId={userId}
-     */
-    @GetMapping("/checkUserId")
-    public ResponseEntity<Integer> checkUserId(@RequestParam("userId") String userId) {
-        User user = new User();
-        user.setUserId(userId);
-        return ResponseEntity.ok(authService.checkUserId(user));
-    }
-
-    /**
-     * 이메일 중복 검사
-     * GET /api/v1/auth/checkEmail?email={email}
-     */
-    @GetMapping("/checkEmail")
-    public ResponseEntity<Integer> checkEmail(@RequestParam("email") String email) {
-        User user = new User();
-        user.setEmail(email);
-        return ResponseEntity.ok(authService.checkEmail(user));
-    }
-
-    /**
-     * 회원 정보 업데이트
-     * POST /api/v1/auth/userUpdate
-     */
-    @PostMapping("/userUpdate")
-    public ResponseEntity<Integer> update(@RequestBody User user) {
-        return ResponseEntity.ok(authService.userUpdate(user));
-    }
 
     /**
      * Access Token 갱신

@@ -16,7 +16,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class PasswordResetService {
 
-    private final AuthService authService;
+    private final UserService userService;
     private final PasswordResetTokenMapper tokenMapper;
     private final EmailService emailService;
 
@@ -26,9 +26,7 @@ public class PasswordResetService {
     @Transactional
     public int createPasswordResetToken(String email) {
         // 1. 사용자 확인
-        User user = new User();
-        user.setEmail(email);
-        User getUser = authService.selectByEmail(user);
+        User getUser = userService.selectByEmail(email);
         if (getUser == null) {
             return 0;
         }
@@ -87,11 +85,9 @@ public class PasswordResetService {
         validateToken(token);
 
         PasswordResetToken resetToken = tokenMapper.findByToken(token);
-        User user = new User();
-        user.setUserId(resetToken.getUserId());
-        User getUser = authService.selectByUserId(user);
+        User getUser = userService.selectById(resetToken.getId());
 
-        authService.updateUserPassword(getUser.getUserId(), newPassword);
+        userService.updateUserPassword(getUser.getUserId(), newPassword);
 
         tokenMapper.markAsUsed(token);
     }

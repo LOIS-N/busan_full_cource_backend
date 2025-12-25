@@ -42,7 +42,7 @@ public class RecommendationService {
         List<SimplifiedSearchHistory> userHistory = getUserSearchHistory(id, "place");
 
         // 3. 현재 위치 주변의 후보 장소 15개 가져오기
-        List<Place> candidates = placeMapper.selectByLocation(x, y, dist, tag);
+        List<Place> candidates = placeMapper.selectAiRecommendationPlace(x, y, dist, tag);
 
         // 후보가 없으면 빈 리스트 반환
         if (candidates == null || candidates.isEmpty()) {
