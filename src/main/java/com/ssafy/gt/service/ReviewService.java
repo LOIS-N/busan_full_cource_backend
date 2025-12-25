@@ -80,6 +80,11 @@ public class ReviewService {
             List<MultipartFile> newImages,
             List<Integer> removeImageIds
     ) {
+        Review toUpdate = reviewMapper.getReviewById(review.getId());
+        if(toUpdate == null) throw new IllegalArgumentException("존재하지 않는 리뷰");
+
+        Integer targetId = review.getId();
+        review.setTargetId(targetId);
         int result = reviewMapper.update(review);
         if (removeImageIds != null && !removeImageIds.isEmpty()) {
             String projectPath = System.getProperty("user.dir");
@@ -118,8 +123,9 @@ public class ReviewService {
                 }
             }
         }
-        BigDecimal averRageRating = reviewMapper.getAverageRatingByTarget(review.getTargetId());
-        placeService.updateAverageRating(review.getTargetId(),averRageRating);
+        BigDecimal averRageRating = reviewMapper.getAverageRatingByTarget(targetId);
+        if(averRageRating == null) averRageRating = BigDecimal.ZERO;
+        placeService.updateAverageRating(targetId,averRageRating);
         return result;
     }
     /**
